@@ -17,13 +17,13 @@ main() {
       if (fork() == 0) {
 	printf("grandchild's pid is %d, process group id is %d\n",
 	       (int) getpid(), (int) getpgrp());
-	puts("child is waiting for parent to complete task");
-	//sleep(1);
-	printf("child's process group is now %d\n",(int)getpgrp());
 	exit(0);
       }
       printf("child's pid is %d, process group id is %d\n",
 	     (int) getpid(), (int) getpgrp());
+      puts("child is waiting for parent to complete task");
+      //sleep(1);
+      printf("child's process group is now %d\n",(int)getpgrp());
       wait(&status); //wait grand child to exit
       exit(0);
     }
