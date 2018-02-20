@@ -55,5 +55,5 @@ void freeProcess(Process* process);
 void freeJob(Job* job);
 void freeJobList();
 void jobSetPGid(Job* job, pid_t pgid);
-void jobChangeStatus(pid_t pgid, int status);
+void jobChangeStatus(pid_t pgid, int status); //used in signal handler and after we get the SIGCHILD we will let it sleep 0.01s to let shell create new process first.
 
