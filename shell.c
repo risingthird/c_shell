@@ -1,3 +1,7 @@
+/*
+structure inspired by: https://github.com/jmreyes/simple-c-shell/blob/master/simple-c-shell.c
+			https://github.com/stpddream/OSHomework/tree/master/hw3
+*/
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
