@@ -4,12 +4,12 @@
 #include <unistd.h>
 
 
-#define JOBSUSP 0
+#define JOBCOMP 0
 #define JOBSTOP 1 
 #define JOBRUN 2
 #define JOBBACK 3
 #define JOBFORE 4
-#define PROCSUSP 0
+#define PROCCOMP 0
 #define PROCSTOP 1
 #define PROCRUN 2
 
@@ -44,16 +44,16 @@ int id;
 
 int jobRemovePid(pid_t pid);
 int jobRemoveJobId(int job_id);
-int jobInsert(Job* job);
+int jobInsert(Job* toAdd);
 int jobInit();
 Job* createJob(char* line, Process* process, int status);
 Job* getJobJobId(int job_id);
 Job* getJobPid(pid_t pid);
 void printList();
-void printJob();
+//void printJob();
 void freeProcess(Process* process);
 void freeJob(Job* job);
 void freeJobList();
 void jobSetPGid(Job* job, pid_t pgid);
-void jobChangeStatus(pid_t pgid, int status); //used in signal handler and after we get the SIGCHILD we will let it sleep 0.01s to let shell create new process first.
+void jobChangeStatus(Job* job, int status);
 
