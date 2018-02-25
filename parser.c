@@ -96,7 +96,7 @@ int parseSegments(char* command, char** segments) {
 	while(split != NULL) {
 		segments[count] = split;
 		count++;
-		split = strtok(NULL, ";");
+		split = strtok(NULL, "|");
 		if(count >= num_segments) {
 				i++;
 				num_segments = DEFAULT_NUM_SEGMENTS << i;
@@ -113,7 +113,7 @@ int parseArguments(char* segments, char** arguments) {
 	int num_arguments = DEFAULT_NUM_ARG;
 	char* split;
 
-	if((split = strtok(segments, "|")) == NULL) {
+	if((split = strtok(segments, " \n\t")) == NULL) {
 		count = 1;
 		arguments[0] = segments;
 		return count;
@@ -122,7 +122,7 @@ int parseArguments(char* segments, char** arguments) {
 	while(split != NULL) {
 		segments[count] = split;
 		count++;
-		split = strtok(NULL, ";");
+		split = strtok(NULL, " \n\t");
 		if(count >= num_arguments) {
 				i++;
 				num_arguments = DEFAULT_NUM_ARG << i;
