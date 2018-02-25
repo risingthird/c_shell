@@ -133,6 +133,37 @@ int parseArguments(char* segments, char** arguments) {
 	return count + 1;
 }
 
+int main(int argc, char** argv) {
+	char* line =  NULL;
+	line = readline(">>>>>>>>");
+	char** arguments = malloc(sizeof(char*) * DEFAULT_NUM_ARG);
+	char** process = malloc(sizeof(char*) * DEFAULT_NUM_PROCESS);
+	char** segments = malloc(sizeof(char*) * DEFAULT_NUM_SEGMENTS);
+	int count = parseCommands(line, process);
+	for(int i = 0; i < count; i++) {
+		printf("%s\n", process[i]);
+	}
+	return 0;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
