@@ -7,9 +7,9 @@
 #include <readline/history.h>
 
 
-#define DEFAULT_NUM_PROCESS 2
-#define DEFAULT_NUM_SEGMENTS 2
-#define DEFAULT_NUM_ARG 2
+#define DEFAULT_NUM_PROCESS 1024
+#define DEFAULT_NUM_SEGMENTS 1024
+#define DEFAULT_NUM_ARG 1024
 #define TRUE 1
 #define FALSE 0
 #define JOBCOMP 0
