@@ -67,7 +67,7 @@ int parseCommands(char* line, char** command) {
 		split = strtok(NULL, ";");
 		if(count >= DEFAULT_NUM_PROCESS) {
 				i++;
-				num_process = DEFAULT_NUMARG << i;
+				num_process = DEFAULT_NUM_PROCESS << i;
 				command = realloc(command, num_process * sizeof(char*));
 		}
 	}
@@ -99,7 +99,7 @@ int parseSegments(char* command, char** segments) {
 		split = strtok(NULL, ";");
 		if(count >= num_segments) {
 				i++;
-				num_process = DEFAULT_NUM_SEGMENT << i;
+				num_segments = DEFAULT_NUM_SEGMENT << i;
 				segments = realloc(segments, num_segments * sizeof(char*));
 		}
 	}
@@ -113,9 +113,9 @@ int parseArguments(char* segments, char** arguments) {
 	int num_arguments = DEFAULT_NUM_ARG;
 	char* split;
 
-	if((split = strtok(command, "|")) == NULL) {
+	if((split = strtok(segments, "|")) == NULL) {
 		count = 1;
-		segments[0] = command;
+		arguments[0] = segments;
 		return count;
 	}
 
@@ -125,8 +125,8 @@ int parseArguments(char* segments, char** arguments) {
 		split = strtok(NULL, ";");
 		if(count >= num_segments) {
 				i++;
-				num_process = DEFAULT_NUM_SEGMENT << i;
-				segments = realloc(segments, num_segments * sizeof(char*));
+				num_arguments = DEFAULT_NUM_ARG << i;
+				segments = realloc(segments, num_arguments * sizeof(char*));
 		}
 	}
 
