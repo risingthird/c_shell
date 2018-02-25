@@ -38,6 +38,7 @@ Job* getJobJobId(int job_id);
 Job* getJobPid(pid_t pid);
 void printList();
 //void printJob();
+void freeArgs(char** args);
 void freeProcess(Process* process);
 void freeJob(Job* job);
 void freeJobList();
