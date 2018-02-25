@@ -123,7 +123,7 @@ int parseArguments(char* segments, char** arguments) {
 		segments[count] = split;
 		count++;
 		split = strtok(NULL, ";");
-		if(count >= num_segments) {
+		if(count >= num_arguments) {
 				i++;
 				num_arguments = DEFAULT_NUM_ARG << i;
 				segments = realloc(segments, num_arguments * sizeof(char*));
