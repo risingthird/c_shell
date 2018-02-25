@@ -35,7 +35,7 @@ void trimAll(char *s) {
 int check_last_character_in_process(char* process_line) {
 	int len = strlen(process_line);
 	while(process_line[len] != '\0') {
-		if(process_line[len] = ' ') {
+		if(process_line[len] == ' ') {
 			len--;
 		}
 		else if (process_line[len] == '&') {
