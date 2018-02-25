@@ -137,11 +137,20 @@ void printList() {
 	}
 }
 
+void freeArgs(char** args) {
+	int count = 0;
+	while(args[count] != NULL) {
+		free(args[count]);
+		count++;
+	}
+	free(args);
+}
+
 void freeProcess(Process* process) {
 	while(process->next != NULL) {
 		Process* temp = process;
 		process = process->next;
-		free(temp->args);
+		freeArgs(temp->args);
 		free(temp);
 	}
 }
