@@ -60,16 +60,20 @@ int parseCommands(char* line, char** command) {
 		command[0] = line;
 		return count;
 	}
-
+	int len;
 	while(split != NULL) {
-		command[count] = split;
+		//int len;
+		len = strlen(split);
+		command[count] = calloc(len+1, sizeof(char));
+		bzero(command[count], len+1);
+		strcpy(command[count], split);
 		count++;
 		split = strtok(NULL, ";");
-		if(count >= DEFAULT_NUM_PROCESS) {
+		/*if(count >= num_process) {
 				i++;
 				num_process = DEFAULT_NUM_PROCESS << i;
-				command = realloc(command, num_process * sizeof(char*));
-		}
+				*command = realloc(*command, num_process * sizeof(char*));
+		}*/
 	}
 
 	for (int j = 0; j < count - 1; ++j) {
@@ -78,7 +82,7 @@ int parseCommands(char* line, char** command) {
 		}
 	}
 
-	return count + 1;
+	return count;
 }
 
 int parseSegments(char* command, char** segments) {
@@ -96,15 +100,15 @@ int parseSegments(char* command, char** segments) {
 	while(split != NULL) {
 		segments[count] = split;
 		count++;
-		split = strtok(NULL, "|");
-		if(count >= num_segments) {
+		split = strtok(NULL, ";");
+		/*if(count >= num_segments) {
 				i++;
 				num_segments = DEFAULT_NUM_SEGMENTS << i;
 				segments = realloc(segments, num_segments * sizeof(char*));
-		}
+		}*/
 	}
 
-	return count + 1;
+	return count;
 }
 
 int parseArguments(char* segments, char** arguments) {
@@ -113,7 +117,7 @@ int parseArguments(char* segments, char** arguments) {
 	int num_arguments = DEFAULT_NUM_ARG;
 	char* split;
 
-	if((split = strtok(segments, " \n\t")) == NULL) {
+	if((split = strtok(segments, "|")) == NULL) {
 		count = 1;
 		arguments[0] = segments;
 		return count;
@@ -122,12 +126,12 @@ int parseArguments(char* segments, char** arguments) {
 	while(split != NULL) {
 		segments[count] = split;
 		count++;
-		split = strtok(NULL, " \n\t");
-		if(count >= num_arguments) {
+		split = strtok(NULL, ";");
+		/*if(count >= num_arguments) {
 				i++;
 				num_arguments = DEFAULT_NUM_ARG << i;
 				segments = realloc(segments, num_arguments * sizeof(char*));
-		}
+		}*/
 	}
 
 	return count + 1;
@@ -137,7 +141,7 @@ int main(int argc, char** argv) {
 	char* line =  NULL;
 	line = readline(">>>>>>>>");
 	char** arguments = malloc(sizeof(char*) * DEFAULT_NUM_ARG);
-	char** process = malloc(sizeof(char*) * DEFAULT_NUM_PROCESS);
+	char** process = malloc(sizeof(char*) * 10);
 	char** segments = malloc(sizeof(char*) * DEFAULT_NUM_SEGMENTS);
 	int count = parseCommands(line, process);
 	for(int i = 0; i < count; i++) {
@@ -145,26 +149,3 @@ int main(int argc, char** argv) {
 	}
 	return 0;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
