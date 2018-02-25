@@ -1,17 +1,4 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <limits.h>
-#include <unistd.h>
-
-
-#define JOBCOMP 0
-#define JOBSTOP 1 
-#define JOBRUN 2
-#define JOBBACK 3
-#define JOBFORE 4
-#define PROCCOMP 0
-#define PROCSTOP 1
-#define PROCRUN 2
+#include "util.h"
 
 typedef struct Process_Node {
     char** args;
