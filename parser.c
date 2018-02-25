@@ -84,7 +84,7 @@ int parseCommands(char* line, char** command) {
 int parseSegments(char* command, char** segments) {
 	int count  = 0;
 	int i = 0;
-	int num_segments = DEFAULT_NUM_SEGMENT;
+	int num_segments = DEFAULT_NUM_SEGMENTS;
 	char* split;
 
 	if((split = strtok(command, "|")) == NULL) {
@@ -99,7 +99,7 @@ int parseSegments(char* command, char** segments) {
 		split = strtok(NULL, ";");
 		if(count >= num_segments) {
 				i++;
-				num_segments = DEFAULT_NUM_SEGMENT << i;
+				num_segments = DEFAULT_NUM_SEGMENTS << i;
 				segments = realloc(segments, num_segments * sizeof(char*));
 		}
 	}
