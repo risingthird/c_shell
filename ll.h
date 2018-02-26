@@ -15,6 +15,7 @@ typedef struct bgpr
     char *line;
     int status;
     int jobId;
+    int field;
     pid_t pgid;
     struct termios j_Tmodes;
     Process *processList;
@@ -31,14 +32,18 @@ Node *head;
 Node *tail;
 int size;
 int id;
+int last_suspended;   // keep track of the last suspended job
+int last_backgrounded;  // keep track of the last backgrounded job
 
 int jobRemovePid(pid_t pid);    // remove job by pid
 int jobRemoveJobId(int job_id); // remove job by job id
 int jobInsert(Job *toAdd);      // add the job to the job list
 int jobInit();                  // initiate the job list.
-Job *createJob(char *line, Process *process, int status);
+Job *createJob(char *line, Process *process, int status, int field);
 Job *getJobJobId(int job_id); // get the current job by job id
 Job *getJobPid(pid_t pid);    // get the current job by pid
+Job* getJLastSuspended();       // get the last suspended job
+Job* getJLastBackgrounded();    // get the last backgrounded job
 void printList();             // print the list
 //void printJob();
 void freeArgs(char** args);
