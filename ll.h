@@ -40,6 +40,7 @@ Job *getJobJobId(int job_id); // get the current job by job id
 Job *getJobPid(pid_t pid);    // get the current job by pid
 void printList();             // print the list
 //void printJob();
+void freeArgs(char** args);
 void freeProcess(Process *process);
 void freeJob(Job *job);                     // free the job from memory
 void freeJobList();                         // free the job list
