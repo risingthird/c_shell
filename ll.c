@@ -56,6 +56,14 @@ Job* getJobPid(pid_t pid) {
 	return NULL;
 }
 
+Job* getJLastSuspended() {
+	return getJobJobId(last_suspended);
+}
+
+Job* getJLastBackgrounded() {
+	return getJobJobId(last_backgrounded);
+}
+
 int jobInsert(Job* job) {
 	Node* toAdd = malloc(sizeof(Node));
 	if(!toAdd) {
