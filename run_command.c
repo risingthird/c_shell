@@ -105,7 +105,8 @@ void put_job_in_foreground(Job* job) {
 	//we have already changed the status of process
 	//wait foreground job to exit
 	while(job->status != JOBCOMP && job->status != JOBSTOP) {
-		pid = waitpid(WAIT_ANY, &statusm WUNTRACED | WNOHANG);
+		//pid = waitpid(WAIT_ANY, &status, WUNTRACED | WNOHANG);
+		pid = waitpid(WAIT_ANY, &status, WUNTRACED);			// since it's in foreground, we shouldn't use WNOHANG
 		printf("foreground job returned, pid is %d\n", pid);
 
 		if(WIFSTOPPED(status))
@@ -243,5 +244,5 @@ void bBg(char** args, int argn) {
 }
 
 int exeBuiltIn(char** args, int argn) {
-	if (char)
+	if (args)
 }
