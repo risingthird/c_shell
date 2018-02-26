@@ -77,6 +77,14 @@ int jobRemovePid(pid_t pid) {
 			Node* temp3 = temp->next;
 			temp2->next = temp3;
 			temp3->prev = temp2;
+			int i = temp->job->jobId;
+			while(temp2->next->job != NULL) {
+				if (temp2->next->job->jobId > i) {
+					temp2->next->job->jobId--;
+				}
+				temp2 = temp2->next;
+			}
+			id--;
 			freeJob(temp->job);
 			free(temp);
 			return TRUE;
@@ -96,6 +104,14 @@ int jobRemoveJobId(int job_id) {
 			Node* temp3 = temp->next;
 			temp2->next = temp3;
 			temp3->prev = temp2;
+			int i = temp->job->jobId;
+			while(temp2->next->job != NULL) {
+				if (temp2->next->job->jobId > i) {
+					temp2->next->job->jobId--;
+				}
+				temp2 = temp2->next;
+			}
+			id--;
 			freeJob(temp->job);
 			free(temp);
 			return TRUE;
