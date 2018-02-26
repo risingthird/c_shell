@@ -14,10 +14,11 @@ int jobInit() {
 	int id = 0;
 }
 
-Job* createJob(char* line, Process* process, int status) {
+Job* createJob(char* line, Process* process, int status, int field) {
 	Job* toReturn = malloc(sizeof(Job));
 	toReturn->status = status;
 	toReturn->jobId = id;
+	toReturn->field = field;
 	id++;
 	if(line != NULL) {
 		toReturn->line  = malloc(sizeof(char) * strlen(line));
@@ -78,6 +79,7 @@ int jobRemovePid(pid_t pid) {
 			temp2->next = temp3;
 			temp3->prev = temp2;
 			int i = temp->job->jobId;
+			// update all job id after the deleted one
 			while(temp2->next->job != NULL) {
 				if (temp2->next->job->jobId > i) {
 					temp2->next->job->jobId--;
@@ -105,6 +107,7 @@ int jobRemoveJobId(int job_id) {
 			temp2->next = temp3;
 			temp3->prev = temp2;
 			int i = temp->job->jobId;
+			// update all job id after the deleted one
 			while(temp2->next->job != NULL) {
 				if (temp2->next->job->jobId > i) {
 					temp2->next->job->jobId--;
