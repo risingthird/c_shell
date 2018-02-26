@@ -11,10 +11,6 @@
 void bFg(char** args, int argn);
 void put_job_in_foreground(Job* job);
 
-//global variable, Probably need to use extern
-int myShTerminal;
-pid_t myShPGid;
-struct termios myShTmodes;
 
 void bKill(char** args, int argn) {
 	int kill_flag = FALSE; //kill_flag is true when input has -9
@@ -46,17 +42,23 @@ void bKill(char** args, int argn) {
 				return;
 			}
 		}
-		else if(args[i][0] == '%') {
+		else if(strcmp(args[i],"%")) {
 			percent_flag ++;
 			is_jid = TRUE;
 			if(is_jid) {
-				sscanf(args[i],"\%%d", &id);
+				id = atoi(args[i+1])
+				if((id = atoi(args[i])) = 0) {
+					printf("kill: usage: kill (signal) %jid (or pid).Currently, signal only support -9, SIGKILL.\n");
+					return;
+				break;
+
 			}
 			else {
 				if((id = atoi(args[i])) = 0) {
 					printf("kill: usage: kill (signal) %jid (or pid).Currently, signal only support -9, SIGKILL.\n");
 					return;
 				}
+				break; //only accept one process
 			}
 		}
 	}
@@ -185,10 +187,9 @@ void bBg(char** args, int argn) {
 	}
 
 	//update job status
-	job->status = JOBFORE;
+	job->status = JOBBACK;
 	pid_t current_pgid = -1 * job->pgid;
 	if(kill(current_pgid, SIGCONT) < 0)
 		perror("kill (SIGCONT)");
-
 
 }
