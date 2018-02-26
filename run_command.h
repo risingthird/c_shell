@@ -10,4 +10,3 @@ void bBg(char** args, int argn);
 int exeJ(Job* job);
 int exeBuiltIn(char** args, int argn);
 int changeDirectory(char** args);
-void sigchld_handler(int sig)；
