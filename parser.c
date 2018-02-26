@@ -1,6 +1,3 @@
-#include "parser.h"
-
-
 /*http://blog.csdn.net/lin535061851/article/details/48395607
 void trimLeft(char *s)  
 {  
@@ -33,9 +30,9 @@ void trimAll(char *s) {
 
 
 int check_last_character_in_process(char* process_line) {
-	int len = strlen(process_line);
+	int len = strlen(process_line)-1;
 	while(process_line[len] != '\0') {
-		if(process_line[len] == ' ') {
+		if(process_line[len] == ' ' || process_line[len] == '\t' || process_line[len] == '\n') {
 			len--;
 		}
 		else if (process_line[len] == '&') {
@@ -57,16 +54,19 @@ int parseCommands(char* line, char** command) {
 
 	if((split = strtok(line, ";")) == NULL) {
 		count = 1;
-		command[0] = line;
+		command[count-1] = malloc(strlen(line)+1);
+		bzero(command[count-1], strlen(line)+1);
+		strcpy(command[count-1], line);
 		return count;
 	}
 	int len;
 	while(split != NULL) {
 		//int len;
 		len = strlen(split);
-		command[count] = calloc(len+1, sizeof(char));
+		command[count] = malloc(len+1);
 		bzero(command[count], len+1);
 		strcpy(command[count], split);
+		command[count][len] = '\0';
 		count++;
 		split = strtok(NULL, ";");
 		/*if(count >= num_process) {
@@ -92,15 +92,22 @@ int parseSegments(char* command, char** segments) {
 	char* split;
 
 	if((split = strtok(command, "|")) == NULL) {
+		int llen = strlen(command);
+		segments[count] = malloc(llen+1);
+		bzero(segments[count], llen+1);
+		strcpy(segments[count], command);
 		count = 1;
-		segments[0] = command;
 		return count;
 	}
-
+	int len;
 	while(split != NULL) {
-		segments[count] = split;
+		len = strlen(split);
+		segments[count] = malloc(len+1);
+		bzero(segments[count], len+1);
+		strcpy(segments[count], split);
+		segments[count][len] = '\0';
 		count++;
-		split = strtok(NULL, ";");
+		split = strtok(NULL, "|");
 		/*if(count >= num_segments) {
 				i++;
 				num_segments = DEFAULT_NUM_SEGMENTS << i;
@@ -117,16 +124,23 @@ int parseArguments(char* segments, char** arguments) {
 	int num_arguments = DEFAULT_NUM_ARG;
 	char* split;
 
-	if((split = strtok(segments, "|")) == NULL) {
-		count = 1;
-		arguments[0] = segments;
+	if((split = strtok(segments, " \n\t")) == NULL) {
+		int llen = strlen(segments);
+		arguments[count] = malloc(llen+1);
+		bzero(arguments[count], llen+1);
+		strcpy(arguments[count], segments);
+		count++;
 		return count;
 	}
-
+	int len;
 	while(split != NULL) {
-		segments[count] = split;
+		len = strlen(split);
+		arguments[count] = malloc(len+1);
+		bzero(arguments[count], len+1);
+		strcpy(arguments[count], split);
+		arguments[count][len] = '\0';
 		count++;
-		split = strtok(NULL, ";");
+		split = strtok(NULL, " \n\t");
 		/*if(count >= num_arguments) {
 				i++;
 				num_arguments = DEFAULT_NUM_ARG << i;
@@ -134,18 +148,36 @@ int parseArguments(char* segments, char** arguments) {
 		}*/
 	}
 
-	return count + 1;
+	return count;
 }
 
 int main(int argc, char** argv) {
 	char* line =  NULL;
 	line = readline(">>>>>>>>");
 	char** arguments = malloc(sizeof(char*) * DEFAULT_NUM_ARG);
-	char** process = malloc(sizeof(char*) * 10);
+	char** process = malloc(sizeof(char*) * DEFAULT_NUM_PROCESS);
 	char** segments = malloc(sizeof(char*) * DEFAULT_NUM_SEGMENTS);
-	int count = parseCommands(line, process);
-	for(int i = 0; i < count; i++) {
-		printf("%s\n", process[i]);
+	for(int i =0 ;i < DEFAULT_NUM_PROCESS; i++) {
+		process[i] = NULL;
 	}
+	for(int i = 0; i < DEFAULT_NUM_SEGMENTS; i++) {
+		segments[i] = NULL;
+	}
+	for(int i = 0; i < DEFAULT_NUM_ARG; i++) {
+		arguments[i] = NULL;
+	}	
+	int count = parseCommands(line, arguments);
+	
+	for(int i = 0; i < count; i++) {
+		printf("%s\n", arguments[i]);
+	}
+	if(count < 0) {
+		printf("OK\n");
+	}
+	freeArgs(arguments);
+	freeArgs(process);
+	freeArgs(segments);
+	
+
 	return 0;
 }
