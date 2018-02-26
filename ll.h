@@ -16,6 +16,7 @@ typedef struct bgpr
     int status;
     int jobId;
     pid_t pgid;
+    struct termios j_Tmodes;
     Process *processList;
 } Job;
 
