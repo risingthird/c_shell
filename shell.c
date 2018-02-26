@@ -18,6 +18,7 @@ structure inspired by: https://github.com/jmreyes/simple-c-shell/blob/master/sim
 
 #define MAXLEN 256
 #define MAXLINE 1024
+#define NEGATIVE -1
 
 // function prototypes.
 void ourPrompt();
@@ -35,40 +36,52 @@ pid_t myShPGid;
 struct termios myShTmodes;
 
 void sigchld_handler(int sig, siginfo_t *sif, void *notused) {
-	int status;
+	//int status;
 	// first get the process id of the child process and get the pgid of the child process
 	pid_t pgid = getpgid(sif->si_pid);
+	if(pgid = NEGATIVE) {
+		perror("Get pgid error:");
+		exit(EXIT_FAILURE);
+	}
 	// Then get the job with pgid;
 	Job* job = getJobPid(pgid);
-	//check whether the calling process is the one that has changed status, wait without blocking
-	if (sif->si_pid == waitpid(pid, &status, WNOHANG | WUNTRACED)) {
-		//check what is the exit status of the calling process
-		if (WIFEXITED(status)) 
-		    {
-		    	if(jobRemovePid(pid) != 1) {
-						printf("Job removal from the job list error.\n");
-					}
-					
-		      printf ("Voluntary exit.\n");
-		      return;
-		    }
-		    if (WIFSTOPPED(status)) 
-		    {
-		      printf ("Suspended.\n");
-		      return;
-		    }
-		    if ( (WTERMSIG(status) <= 12) || (WTERMSIG(status) == 15))
-		    {
-		      printf ("Croaked");
-		      return;
-		    }
-		    printf ("Nothing interesting\n");
-			return;
-		}
-	else{
-		//if no update, print not interested.
-		printf("Not interested\n");
+	if (job == NULL) {
+		printf("getJobPid has error.");
 	}
+	//check whether the calling process is the one that has changed status, wait without blocking
+	//if (sif->si_pid == waitpid(pgid, &status, WUNTRACED)) {
+		//check what is the exit status of the calling process
+		/* if the job normally exit, update its status, print the job status, remove it from job list
+			 and then free the memory. Else if the job is suspended, update its status and print its status.
+			 Else if the job is forced to terminate, update its status, print its status, remove it from the
+			 job list, and then free the memory.
+		*/
+		if (WIFEXITED(sif->si_status)) 
+		    {
+					jobChangeStatus(job, JOBCOMP);
+					printJobStatus(job);
+		    	if(jobRemovePid(pgid) != TRUE)
+						printf("Job removal from the job list error.\n");
+					freeJob(job); // free this job
+		      return;
+		    }
+		    if (WIFSTOPPED(sif->si_status)) 
+		    {
+					jobChangeStatus(job, JOBSTOP);
+					printJobStatus(job);
+		      return;
+		    }
+		    if ( (WTERMSIG(sif->si_status) <= 12) || (WTERMSIG(sif->si_status) == 15))
+		    {
+					jobChangeStatus(job, JOBTERM);
+					printJobStatus(job);
+		    	if(jobRemovePid(pgid) != TRUE)
+						printf("Job removal from the job list error.\n");
+					freeJob(job); // free this job
+		      return;
+		    }
+		//}
+		return;
 }
 
 // print our shell prompt
@@ -96,7 +109,6 @@ void ourPrompt() {
     printf("/ ");
   else
     printf("$ ");
-
   return;
 }
 
@@ -114,7 +126,7 @@ int main(int argc, char** argv) {
 	//set flags, SA_SIGINFO flag is to specify signal handler in sa is sa_sigaction.
 	sa.sa_flags = SA_SIGINFO;
 	//register the signal SIGCHLD.
-	sigaction (SIGCHLD, &sa, NULL);
+	sigaction(SIGCHLD, &sa, NULL);
 
 	int numCommands;
 	int numArguments;
