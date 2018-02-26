@@ -11,6 +11,10 @@
 void bFg(char** args, int argn);
 void put_job_in_foreground(Job* job);
 
+//global variable, Probably need to use extern
+int myShTerminal;
+pid_t myShPGid;
+struct termios myShTmodes;
 
 void bKill(char** args, int argn) {
 	int kill_flag = FALSE; //kill_flag is true when input has -9
@@ -42,23 +46,17 @@ void bKill(char** args, int argn) {
 				return;
 			}
 		}
-		else if(strcmp(args[i],"%")) {
+		else if(args[i][0] == '%') {
 			percent_flag ++;
 			is_jid = TRUE;
 			if(is_jid) {
-				id = atoi(args[i+1])
-				if((id = atoi(args[i])) = 0) {
-					printf("kill: usage: kill (signal) %jid (or pid).Currently, signal only support -9, SIGKILL.\n");
-					return;
-				break;
-
+				sscanf(args[i],"\%%d", &id);
 			}
 			else {
 				if((id = atoi(args[i])) = 0) {
 					printf("kill: usage: kill (signal) %jid (or pid).Currently, signal only support -9, SIGKILL.\n");
 					return;
 				}
-				break; //only accept one process
 			}
 		}
 	}
@@ -142,7 +140,7 @@ void put_job_in_foreground(Job* job) {
 void bFg(char** args, int argn) {
 	int jid; // get job id by args or use default setting
 	Job* current_job = NULL;
-	if(argn == 1)
+	/*if(argn == 1)
 		jid = num_of_job(); // implemented by jiaping, get the number of job in a job list
 	else
 		jid = atoi(args[1]); //convert the input job id to int
@@ -151,10 +149,34 @@ void bFg(char** args, int argn) {
 	if(current_job == NULL) {
 		printf("job %d does not exist, we can find it\n", jid);
 		return;
+	}*/
+
+	if (argn == 1) {
+		current_job = getJLastBackgrounded();
+	}
+	else if (argn == 2){
+		if (args[1][0] == '%' && atoi(args[1]+1) != 0) {
+			current_job = getJobJobId(atoi(args[1]+1));
+		}
+		else {
+			printf("Pleas type in %[number]\n", );
+		}
+	}
+	else if(argn == 3) {
+		if (args[1] == "%" && atoi(args[2]) != 0) {
+			current_job = getJobJobId(atoi(args[2]));
+		}
+		else {
+			printf("Pleas type in %[number]\n", );
+		}
+	}
+	else {
+		printf("Pleas type in %[number]\n", );	
 	}
 
 	//update job status
-	job->status = JOBFORE;
+	job->field = JOBFORE;
+	job->status = JOBRUN;
 	pid_t current_pgid = -1 * job->pgid;
 	if(kill(current_pgid, SIGCONT) < 0)
 		perror("kill (SIGCONT)"); // send sigcont to all processes of that process group
@@ -173,23 +195,53 @@ void bFg(char** args, int argn) {
 
 }
 
+// cound be "bg %        number" or "bg %number"
 void bBg(char** args, int argn) {
 	Job* current_job = NULL;
-	if(argn == 1)
+	/*if(argn == 1)
 		jid = num_of_job(); // implemented by jiaping, get the number of job in a job list
 	else
 		jid = atoi(args[1]); //convert the input job id to int
+	*/
+	if (argn == 1) {
+		current_job = getJLastSuspended();
+	}
+	else if (argn == 2){
+		if (args[1][0] == '%' && atoi(args[1]+1) != 0) {
+			current_job = getJobJobId(atoi(args[1]+1));
+		}
+		else {
+			printf("Pleas type in %[number]\n", );
+		}
+	}
+	else if(argn == 3) {
+		if (args[1] == "%" && atoi(args[2]) != 0) {
+			current_job = getJobJobId(atoi(args[2]));
+		}
+		else {
+			printf("Pleas type in %[number]\n", );
+		}
+	}
+	else {
+		printf("Pleas type in %[number]\n", );	
+	}
 
-	current_job = getJobJobId(jid);
+	//current_job = getJobJobId(jid);
 	if(current_job == NULL) {
 		printf("job %d does not exist, we can find it\n", jid);
 		return;
 	}
 
 	//update job status
-	job->status = JOBBACK;
+	job->field = JOBBACK;
+	job->status = JOBRUN;
 	pid_t current_pgid = -1 * job->pgid;
 	if(kill(current_pgid, SIGCONT) < 0)
 		perror("kill (SIGCONT)");
 
+
+}
+
+int exeBuiltIn(char** args, int argn) {
+	if (char)
 }
