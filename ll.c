@@ -58,7 +58,7 @@ Job* getJobPid(pid_t pid) {
 int jobInsert(Job* job) {
 	Node* toAdd = malloc(sizeof(Node));
 	if(!toAdd) {
-		return -1;
+		return FALSE;
 	}
 	toAdd->job = job;
 	Node* temp = tail->prev;
@@ -66,7 +66,7 @@ int jobInsert(Job* job) {
 	toAdd->prev = temp;
 	toAdd->next = tail;
 	tail->prev = toAdd;
-	return 1;
+	return TRUE;
 }
 
 int jobRemovePid(pid_t pid) {
@@ -79,13 +79,13 @@ int jobRemovePid(pid_t pid) {
 			temp3->prev = temp2;
 			freeJob(temp->job);
 			free(temp);
-			return 1;
+			return TRUE;
 		}
 		else {
 			temp = temp->next;
 		}
 	}
-	return -1;
+	return FALSE;
 }
 
 int jobRemoveJobId(int job_id) {
@@ -98,13 +98,13 @@ int jobRemoveJobId(int job_id) {
 			temp3->prev = temp2;
 			freeJob(temp->job);
 			free(temp);
-			return 1;
+			return TRUE;
 		}
 		else {
 			temp = temp->next;
 		}
 	}
-	return -1;
+	return FALSE;
 }
 
 void jobSetPGid(Job* job, pid_t pgid) {
@@ -120,20 +120,38 @@ void jobChangeStatus(Job* job, int status) {
 void printList() {
 	Node* temp = head;
 	while(temp->next->job != NULL) {
-		if (temp->next->job->status == 0) {
+		if (temp->next->job->status == JOBCOMP) {
 			printf("[%d] Done                     %s", temp->next->job->jobId, temp->next->job->line);
 		}
-		else if(temp->next->job->status ==  1) {
+		else if(temp->next->job->status ==  JOBSTOP) {
 			printf("[%d] Stopped                     %s", temp->next->job->jobId, temp->next->job->line);
 		}
-		else if(temp->next->job->status ==  2) {
+		else if(temp->next->job->status ==  JOBRUN) {
 			printf("[%d] Run                     %s", temp->next->job->jobId, temp->next->job->line);
+		}
+		else if (temp->next->job->status ==  JOBTERM) {
+			printf("[%d] Forcefully Terminated                     %s", temp->next->job->jobId, temp->next->job->line);
 		}
 		else {
 			perror("Print status error!\n");
-			exit(1);
+			exit(EXIT_FAILURE);
 		}
 		temp = temp->next;
+	}
+}
+
+void printJobStatus(Job* job) {
+	if(job->status == JOBCOMP)
+		printf("[%d] Done                     %s", job->jobId, job->line);
+	else if(job->status == JOBSTOP)
+		printf("[%d] Stopped                     %s", job->jobId, job->line);
+	else if(job->status == JOBRUN)
+		printf("[%d] Run                     %s", job->jobId, job->line);
+	else if(job->status == JOBTERM)
+		printf("[%d] Forcefully terminated                     %s", job->jobId, job->line);
+	else {
+		perror("Print status error!\n");
+		exit(EXIT_FAILURE)
 	}
 }
 
@@ -171,30 +189,3 @@ void freeJobList() {
 	free(head);
 	free(tail);
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
