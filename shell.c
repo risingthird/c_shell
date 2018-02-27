@@ -3,9 +3,6 @@ structure inspired by: https://github.com/jmreyes/simple-c-shell/blob/master/sim
 			https://github.com/stpddream/OSHomework/tree/master/hw3
 */
 #include <stdio.h>
-#include <stdlib.h>
-#include <unistd.h>
-#include <string.h>
 #include <sys/types.h>
 #include <signal.h>
 #include <sys/wait.h>
@@ -31,7 +28,6 @@ char** args; // arguments in each *command
 char** command; // command line that has been separated by ";"
 char* line; // the whole command line
 char* jobLine; // things we will store in job struct
-
 
 void sigchld_handler(int sig, siginfo_t *sif, void *notused) {
 	//int status;
@@ -113,7 +109,7 @@ void ourPrompt() {
 int main(int argc, char** argv) {
 	initShell();
 	jobInit();
-	
+	int status = 0;
 	/* Sigchild signal handling*/
 	//declare the sample sigaction struct
 	struct sigaction sa;
@@ -161,10 +157,10 @@ int main(int argc, char** argv) {
 				temp->next = toAdd;
 				temp = toAdd;
 			}
-			Job* job = createJob(jobLine, dummy->next, int status); 
+			Job* job = createJob(jobLine, dummy->next, status);
 			// I don't know what to do with status right now, will figure out in a moment 
 			free(dummy);
-			exeJ(job);
+            executing_command_without_pipe(job);
 		}
 
 
