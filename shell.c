@@ -148,17 +148,23 @@ int main(int argc, char** argv) {
 	//register the signal SIGCHLD.
 	sigaction(SIGCHLD, &sa, NULL);
 	
-	sigset_t block_mask;
-
+	//sigset_t block_mask;
     	//sigaddset(&block_mask, SIGINT);
-    	sigaddset(&block_mask, SIGTSTP);
-    	sigaddset(&block_mask, SIGTERM);
-    	sigaddset(&block_mask, SIGQUIT);
-    	sigaddset(&block_mask, SIGTTOU);
-    	sigaddset(&block_mask, SIGTTIN);
-    	sigprocmask(SIG_BLOCK, &block_mask, NULL);
+	
+	//ignore most signals in parent shell
+	signal(SIGINT, SIG_IGN);
+	signal(SIGTERM, SIG_IGN);
+	signal(SIGQUIT, SIG_IGN);
+	signal(SIGTTOU, SIG_IGN);
+	signal(SIGTTIN, SIG_IGN);
+//     	sigaddset(&block_mask, SIGTSTP);
+//     	sigaddset(&block_mask, SIGTERM);
+//     	sigaddset(&block_mask, SIGQUIT);
+//     	sigaddset(&block_mask, SIGTTOU);
+//     	sigaddset(&block_mask, SIGTTIN);
+//     	sigprocmask(SIG_BLOCK, &block_mask, NULL);
 	sigemptyset(&child_mask);
-	//sigaddset(&child_mask, SIGINT);
+	sigaddset(&child_mask, SIGINT);
     	sigaddset(&child_mask, SIGTSTP);
     	sigaddset(&child_mask, SIGTERM);
     	sigaddset(&child_mask, SIGQUIT);
