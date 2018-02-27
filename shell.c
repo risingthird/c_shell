@@ -132,6 +132,7 @@ void initShell() {
 int main(int argc, char** argv) {
 	//initShell();
 	jobInit();
+	initShell();
 	int status = 0;
 	/* Sigchild signal handling*/
 	//declare the sample sigaction struct
@@ -214,6 +215,7 @@ int main(int argc, char** argv) {
 			}
 			status = JOBRUN;
 			Job* job = createJob(jobLine, toAdd, status, field);
+
 
 			// I don't know what to do with status right now, will figure out in a moment 
 			//free(dummy);// shouldn't free it here, process will be automatically freed when the job is removed from joblist

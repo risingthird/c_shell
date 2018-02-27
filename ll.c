@@ -11,7 +11,7 @@ void jobInit() {
 	tail->next = NULL;
 	head->job = NULL;
 	tail->job = NULL;
-	int id = 0;
+	id = 0;
 }
 
 Job* createJob(char* line, Process* process, int status, int field) {
@@ -25,7 +25,7 @@ Job* createJob(char* line, Process* process, int status, int field) {
 		strcpy(toReturn->line, line);
 	}
 	toReturn->processList = process;
-	toReturn->pgid = -1;
+	toReturn->pgid = 0;
 	// I have no idea how to set pgid. Need to figure out later
 	return toReturn;
 }
