@@ -27,7 +27,8 @@ void trimAll(char *s) {
 	trimRight(s);
 	trimLeft(s);
 } */
-
+#include "parser.h"
+//#include "ll.h"
 
 int check_last_character_in_process(char* process_line) {
 	int len = strlen(process_line)-1;
@@ -149,12 +150,13 @@ int parseArguments(char* segments, char** arguments) {
 		}*/
 	}
 	int temp = strlen(arguments[count-1]);
-	if (temp == 1 && arguments[count-1][temp-1] == '&') {
+	if(temp == 1 && arguments[count-1][temp-1] == '&') {
 		foreground = -1;
 		free(arguments[count-1]);
+		arguments[count-1] = NULL;
 		count--;
 	} 
-	else if (arguments[count-1][temp-1] == '&') {
+	else if(arguments[count-1][temp-1] == '&'){
 		foreground = -1;
 		arguments[count-1][temp-1] = '\0';
 	}
