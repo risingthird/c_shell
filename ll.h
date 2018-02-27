@@ -40,7 +40,7 @@ int last_backgrounded;  // keep track of the last backgrounded job
 int jobRemovePid(pid_t pid);    // remove job by pid
 int jobRemoveJobId(int job_id); // remove job by job id
 int jobInsert(Job *toAdd);      // add the job to the job list
-int jobInit();                  // initiate the job list.
+void jobInit();                  // initiate the job list.
 Job *createJob(char *line, Process *process, int status, int field);
 Job *getJobJobId(int job_id); // get the current job by job id
 Job *getJobPid(pid_t pid);    // get the current job by pid
