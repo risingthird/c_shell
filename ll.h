@@ -1,3 +1,5 @@
+#ifndef LL_
+#define LL_
 #include "util.h"
 
 typedef struct Process_Node
@@ -54,3 +56,5 @@ void jobSetPGid(Job *job, pid_t pgid);      // set the process group id of the c
 void jobChangeStatus(Job *job, int status); // change the status of the current job given a status code
 void joblock(); //block signal
 void jobunlock(); //unblock signal
+
+#endif
