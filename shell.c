@@ -23,7 +23,7 @@ void initShell();
 void sigchld_handler(int sig, siginfo_t *sif, void *notused);
 
 // global variables
-char** argsWithPipe;  //  xxx | xxx | xxx | ... 
+char** args_without_pipe;  //  xxx | xxx | xxx | ... 
 char** args; // arguments in each *command
 char** command; // command line that has been separated by ";"
 char* line; // the whole command line
@@ -108,15 +108,15 @@ void ourPrompt() {
 
 void initShell() {
   myShTerminal = STDOUT_FILENO;
-  if(!isatty(ttyDevice))
+  if(!isatty(myShTerminal))
     perror("not a tty device");
   else {
         if (tcgetattr(myShTerminal, &myShTmodes) != 0)
            perror("tcgetattr error");
         else {
-           if (termAttributes.c_iflag & IXON)
+           if (myShTmodes.c_lflag.c_iflag & IXON)
                printf("Terminal start and stop is enabled\n");
-           if (termAttributes.c_lflag & ICANON)
+           if (myShTmodes.c_lflag.c_lflag & ICANON)
                printf("Terminal is in canonical mode\n");
         }
      }
