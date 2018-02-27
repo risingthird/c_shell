@@ -31,9 +31,7 @@ char** args; // arguments in each *command
 char** command; // command line that has been separated by ";"
 char* line; // the whole command line
 char* jobLine; // things we will store in job struct
-int myShTerminal;
-pid_t myShPGid;
-struct termios myShTmodes;
+
 
 void sigchld_handler(int sig, siginfo_t *sif, void *notused) {
 	//int status;
