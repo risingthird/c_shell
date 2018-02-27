@@ -6,7 +6,6 @@
 //void joblock();
 
 
-
 // built-in command: jobs
 void bJobs() {
 	printList();
@@ -22,7 +21,7 @@ void bKill(char** args, int argn) {
 	Job* job;
 	int to_be_killed = 0;
 	if(argn == 1) {
-		printf("kill: usage: kill (signal) %jid (or pid).Currently, signal only support -9, SIGKILL.\n");
+		printf("kill: usage: kill (signal) %%jid (or pid).Currently, signal only support -9, SIGKILL.\n");
 		return;
 	}
 
@@ -30,7 +29,7 @@ void bKill(char** args, int argn) {
 	for(int i = 1; i < argn; i++) {
 		//if the input is invalid, we will print usage of kill and return
 		if(dash_flag > 1 || percent_flag > 1) {
-			rintf("kill: usage: kill (signal) \%jid (or pid).Currently, signal only support -9, SIGKILL.\n");
+			printf("kill: usage: kill (signal) %%jid (or pid).Currently, signal only support -9, SIGKILL.\n");
 			return;
 		}
 		if(args[i][0] == '-'){
@@ -39,7 +38,7 @@ void bKill(char** args, int argn) {
 				kill_flag = TRUE; //probably we need to test whether kill_flag is false
 			}
 			else {
-				printf("kill: usage: kill (signal) \%jid (or pid).Currently, signal only support -9, SIGKILL.\n");
+				printf("kill: usage: kill (signal) %%jid (or pid).Currently, signal only support -9, SIGKILL.\n");
 				return;
 			}
 		}
@@ -47,11 +46,11 @@ void bKill(char** args, int argn) {
 			percent_flag ++;
 			is_jid = TRUE;
 			if(is_jid) {
-				sscanf(args[i],"\%%d", &id);
+				sscanf(args[i],"%%%d", &id);
 			}
 			else {
-				if((id = atoi(args[i])) = 0) {
-					printf("kill: usage: kill (signal) %jid (or pid).Currently, signal only support -9, SIGKILL.\n");
+				if((id = atoi(args[i])) == 0) {
+					printf("kill: usage: kill (signal) %%jid (or pid).Currently, signal only support -9, SIGKILL.\n");
 					return;
 				}
 			}
@@ -76,9 +75,10 @@ void bKill(char** args, int argn) {
 		printf("kill by process %d\n", id);
 
 	to_be_killed = (-1) * job->pgid;
-	if(kill_flag)
+    if(kill_flag){
 		if(kill(to_be_killed,SIGKILL) == -1)
 			perror("Kill failed\n");
+    }
 	else
 		if(kill(to_be_killed,SIGTERM) == -1)
 			perror("Kill failed\n");
@@ -118,7 +118,7 @@ void put_job_in_foreground(Job* job) {
 	//if the job complete, we exit the job
 	if(job->status == JOBCOMP) {
 		joblock(job); //need to implement, block all the possible access to job list
-		jobRemoveJobId(job->id);
+		jobRemoveJobId(job->jobId);
 		jobunlock(job);
 	}
 
@@ -128,10 +128,10 @@ void put_job_in_foreground(Job* job) {
 	}
 
     /* Put the shell back in the foreground.  */
-    tcsetpgrp (shell_terminal, shell_pgid);
+    tcsetpgrp (myShTerminal, myShPGid);
 
     /* Restore the shell’s terminal modes.  */
-    tcsetattr (shell_terminal, TCSADRAIN, &shell_tmodes); 
+    tcsetattr (myShTerminal, TCSADRAIN, &myShTmodes);
 
 }
 
@@ -158,25 +158,25 @@ void bFg(char** args, int argn) {
 			current_job = getJobJobId(atoi(args[1]+1));
 		}
 		else {
-			printf("Pleas type in %[number]\n", );
+			printf("Pleas type in %%[number]\n");
 		}
 	}
 	else if(argn == 3) {
-		if (args[1] == "%" && atoi(args[2]) != 0) {
+		if ((strcmp(args[1],"%") == 0) && atoi(args[2]) != 0) {
 			current_job = getJobJobId(atoi(args[2]));
 		}
 		else {
-			printf("Pleas type in %[number]\n", );
+			printf("Pleas type in %%[number]\n");
 		}
 	}
 	else {
-		printf("Pleas type in %[number]\n", );	
+		printf("Pleas type in %%[number]\n");
 	}
 
 	//update job status
-	job->field = JOBFORE;
-	job->status = JOBRUN;
-	pid_t current_pgid = -1 * job->pgid;
+	current_job->field = JOBFORE;
+	current_job->status = JOBRUN;
+	pid_t current_pgid = -1 * current_job->pgid;
 	if(kill(current_pgid, SIGCONT) < 0)
 		perror("kill (SIGCONT)"); // send sigcont to all processes of that process group
 	//we can directly send a signal to a process group
@@ -210,31 +210,31 @@ void bBg(char** args, int argn) {
 			current_job = getJobJobId(atoi(args[1]+1));
 		}
 		else {
-			printf("Pleas type in %[number]\n", );
+			printf("Pleas type in %%[number]\n");
 		}
 	}
 	else if(argn == 3) {
-		if (args[1] == "%" && atoi(args[2]) != 0) {
+		if ((strcmp(args[1],"%") == 0) && atoi(args[2]) != 0) {
 			current_job = getJobJobId(atoi(args[2]));
 		}
 		else {
-			printf("Pleas type in %[number]\n", );
+			printf("Pleas type in %%[number]\n");
 		}
 	}
 	else {
-		printf("Pleas type in %[number]\n", );	
+		printf("Pleas type in %%[number]\n" );
 	}
 
 	//current_job = getJobJobId(jid);
 	if(current_job == NULL) {
-		printf("job %d does not exist, we can find it\n", jid);
+		printf("job does not exist, we can find it\n");
 		return;
 	}
 
 	//update job status
-	job->field = JOBBACK;
-	job->status = JOBRUN;
-	pid_t current_pgid = -1 * job->pgid;
+	current_job->field = JOBBACK;
+	current_job->status = JOBRUN;
+	pid_t current_pgid = -1 * current_job->pgid;
 	if(kill(current_pgid, SIGCONT) < 0)
 		perror("kill (SIGCONT)");
 
@@ -264,21 +264,24 @@ int exeBuiltIn(char** args, int argn) {
 		bKill(args, argn);
 	}
 	else if (strcmp(args[0],"fg") == 0) {
-		bFg(args, argn)
+        bFg(args, argn);
 	}
 	else if (strcmp(args[0],"bg") == 0) {
-		bBg(args, argn)
+        bBg(args, argn);
 	}
 	else if (strcmp(args[0],"exit") == 0) {
 		bExit(); // todo
 	}
-	else
+    else {
 		perror("invalid input, check_built_in wrong probably\n");
+        return FALSE;
+    }
+    return TRUE;
 }
 
 // not supporting pipe for now.
 // executing the command without pipe. Example: emacs shell.c; or emacs shell.c &
-int executing_command_without_pipe(Job *job) {
+void executing_command_without_pipe(Job *job) {
 	pid_t pid;
 	int status;
 	//Job *childjob;
@@ -296,7 +299,7 @@ int executing_command_without_pipe(Job *job) {
 			//child process
 			// execute the command
 			if((execvp(args[0], args)) == FAIL) {
-				printf("Didn't execute the command: %s! Either don't know what it is, or it is unavailable. \n", command_line[0]);
+				printf("Didn't execute the command: %s! Either don't know what it is, or it is unavailable. \n", args[0]);
       			exit(EXIT_FAILURE);
 			}
 		} else if (pid > 0) {
@@ -324,7 +327,7 @@ int executing_command_without_pipe(Job *job) {
 			//child process
 			// execute the command
 			if((execvp(args[0], args)) == FAIL) {
-				printf("Didn't execute the command: %s! Either don't know what it is, or it is unavailable. \n", command_line[0]);
+				printf("Didn't execute the command: %s! Either don't know what it is, or it is unavailable. \n", args[0]);
       			exit(EXIT_FAILURE);
 			}
 		} else if (pid > 0) {
