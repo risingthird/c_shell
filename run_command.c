@@ -96,7 +96,7 @@ void put_job_in_foreground(Job* job) {
 	//stroe the current shell status to its termios
 	//tcgetattr(myShTerminal, &myShTmodes);
 
-	//restore the terminal attributes when the job stopped last time
+	//restore the terminal attributes when the job stopped last time -- if the job used to be stopped, we restroe, otherwise, we ignore
 	tcsetattr(myShTerminal, TCSADRAIN, &job->j_Tmodes);
 
 	//we have already changed the status of process
@@ -174,7 +174,7 @@ void bFg(char** args, int argn) {
 	}
 
 	//update job status
-	current_job->field = JOBFORE;
+	current_job->field = JOBFORE; //-- How do I know it is from stopped job or newly created job? how to keep track
 	current_job->status = JOBRUN;
 	pid_t current_pgid = -1 * current_job->pgid;
 	if(kill(current_pgid, SIGCONT) < 0)
