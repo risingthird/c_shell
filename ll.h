@@ -54,7 +54,5 @@ void freeJob(Job *job);                     // free the job from memory
 void freeJobList();                         // free the job list
 void jobSetPGid(Job *job, pid_t pgid);      // set the process group id of the current job with a given pgid.
 void jobChangeStatus(Job *job, int status); // change the status of the current job given a status code
-void joblock(); //block signal
-void jobunlock(); //unblock signal
 void printJobStatus(Job *job); // print the current status of the job
 #endif
