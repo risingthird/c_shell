@@ -312,8 +312,9 @@ void executing_command_without_pipe(Job *job) {
 			waitpid(pid, &status, WUNTRACED);
 			// if the signal is termination (WIFSIGNALED) or normal exit, remove the job and free the memory.
 			if (WIFSIGNALED(status) || WIFEXITED(status)) {
-				if(jobRemovePid(getpgid(pid)))
-					printf("Job removal from the job list error.\n");
+				jobs_lock();
+				jobRemovePid(getpgid(pid));
+				jobs_unlock();
 				freeJob(job);
 			} else if (WIFSTOPPED(status)) {
 			// else if the signal is stop, update the job's field, put it into background (save termios), 
@@ -349,8 +350,9 @@ void executing_command_without_pipe(Job *job) {
 			waitpid(pid, &status, WNOHANG);
 			// if the signal is termination (WIFSIGNALED) or normal exit, remove the job and free the memory.
 			if (WIFSIGNALED(status) || WIFEXITED(status)) {
-				if(jobRemovePid(getpgid(pid)))
-					printf("Job removal from the job list error.\n");
+				jobs_lock();
+				jobRemovePid(getpgid(pid));
+				jobs_unlock();
 				freeJob(job);
 			} else
 				printf("Error in parent process");
