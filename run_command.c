@@ -306,7 +306,10 @@ void executing_command_without_pipe(Job *job, sigset_t child_mask) {
 			job->pgid = getpgrp(); 
 			//child process
 			signal(SIGINT, SIG_DFL);
-
+			signal(SIGTERM, SIG_DFL);
+			signal(SIGQUIT, SIG_DFL);
+			signal(SIGTTOU, SIG_DFL);
+			signal(SIGTTIN, SIG_DFL);
 			// execute the command
 			//printf("%d %d %d \n",getpgid(getpid()), getpid(), getppid());
 			tcsetpgrp(myShTerminal, getpid());
@@ -352,6 +355,10 @@ void executing_command_without_pipe(Job *job, sigset_t child_mask) {
 			job->pgid = getpgrp(); 
 			//sigemptyset(&block_mask);
 			signal(SIGINT, SIG_DFL);
+			signal(SIGTERM, SIG_DFL);
+			signal(SIGQUIT, SIG_DFL);
+			signal(SIGTTOU, SIG_DFL);
+			signal(SIGTTIN, SIG_DFL);
 			// execute the command
 			if((execvp(args[0], args)) == FAIL) {
 				printf("Didn't execute the command: %s! Either don't know what it is, or it is unavailable. \n", args[0]);
