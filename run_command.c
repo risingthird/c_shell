@@ -86,7 +86,7 @@ void bKill(char** args, int argn) {
 }
 
 
-void put_job_in_foreground(Job* job, sigset_t child_mask) {
+void put_job_in_foreground(Job* job, sigset_t child_mask, int flag_stop) {
 	pid_t pid;
 	int status;
 	//put the job into foreground;
@@ -97,7 +97,8 @@ void put_job_in_foreground(Job* job, sigset_t child_mask) {
 	//tcgetattr(myShTerminal, &myShTmodes);
 
 	//restore the terminal attributes when the job stopped last time -- if the job used to be stopped, we restroe, otherwise, we ignore
-	tcsetattr(myShTerminal, TCSADRAIN, &job->j_Tmodes);
+	if(flag_stop)
+		tcsetattr(myShTerminal, TCSADRAIN, &job->j_Tmodes);
 
 	//we have already changed the status of process
 	//wait foreground job to exit
@@ -139,6 +140,7 @@ void put_job_in_foreground(Job* job, sigset_t child_mask) {
 void bFg(char** args, int argn, sigset_t child_mask) {
 	int jid; // get job id by args or use default setting
 	Job* current_job = NULL;
+	int is_suspended = 0;
 	/*if(argn == 1)
 		jid = num_of_job(); // implemented by jiaping, get the number of job in a job list
 	else
@@ -174,6 +176,9 @@ void bFg(char** args, int argn, sigset_t child_mask) {
 	}
 
 	//update job status
+	//first check whether the job used to be stopped
+	if(current_job->field == JOBSTOP)
+		is_suspended = 1;
 	current_job->field = JOBFORE; //-- How do I know it is from stopped job or newly created job? how to keep track
 	current_job->status = JOBRUN;
 	pid_t current_pgid = -1 * current_job->pgid;
@@ -190,7 +195,7 @@ void bFg(char** args, int argn, sigset_t child_mask) {
 	*/
 
 	//should add a flag to determine whether job used to be stopped
-	put_job_in_foreground(current_job, child_mask);
+	put_job_in_foreground(current_job, child_mask, is_suspended);
 
 }
 
