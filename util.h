@@ -18,6 +18,11 @@
 enum {FALSE, TRUE}; // FALSE 0, TRUE 1;
 enum {JOBCOMP, JOBSTOP, JOBRUN, JOBBACK, JOBFORE, JOBTERM}; // JOBCOMP 0, JOBSTOP 1, JOBRUN 2, JOBBACK 3, JOBFORE 4, JOBTERM 5
 enum {PROCCOMP, PROCSTOP, PROCRUN}; // PROCCOMP 0, PROCSTOP 1, PROCRUN 2
+//globally used myshell status variable
+int myShTerminal;
+pid_t myShPGid;
+struct termios myShTmodes;
+
 /*
 #define TRUE 1
 #define FALSE 0
