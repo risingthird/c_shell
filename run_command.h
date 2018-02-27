@@ -13,6 +13,8 @@ void bBg(char** args, int argn);
 void bExit();
 void bJobs();
 void executing_command_without_pipe(Job* job);
+void jobs_lock();
+void jobs_unlock();
 int exeBuiltIn(char** args, int argn);
 int changeDirectory(char** args);
 int check_built_in(Job* job);
