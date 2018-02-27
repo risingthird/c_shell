@@ -107,7 +107,19 @@ void ourPrompt() {
 }
 
 void initShell() {
-	
+  myShTerminal = STDOUT_FILENO;
+  if(!isatty(ttyDevice))
+    perror("not a tty device");
+  else {
+        if (tcgetattr(myShTerminal, &myShTmodes) != 0)
+           perror("tcgetattr error");
+        else {
+           if (termAttributes.c_iflag & IXON)
+               printf("Terminal start and stop is enabled\n");
+           if (termAttributes.c_lflag & ICANON)
+               printf("Terminal is in canonical mode\n");
+        }
+     }
 }
 
 int main(int argc, char** argv) {
