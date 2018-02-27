@@ -55,9 +55,9 @@ void sigchld_handler(int sig, siginfo_t *sif, void *notused) {
 		    {
 					jobChangeStatus(job, JOBCOMP);
 					printJobStatus(job);
-		    	if(jobRemovePid(pgid) != TRUE)
-						printf("Job removal from the job list error.\n");
-					freeJob(job); // free this job
+		    	//if(jobRemovePid(pgid) != TRUE)
+			//			printf("Job removal from the job list error.\n");
+			//		freeJob(job); // free this job
 		      return;
 		    }
 		    if (WIFSTOPPED(sif->si_status)) 
@@ -70,9 +70,9 @@ void sigchld_handler(int sig, siginfo_t *sif, void *notused) {
 		    {
 					jobChangeStatus(job, JOBTERM);
 					printJobStatus(job);
-		    	if(jobRemovePid(pgid) != TRUE)
-						printf("Job removal from the job list error.\n");
-					freeJob(job); // free this job
+		    	//if(jobRemovePid(pgid) != TRUE)
+			//			printf("Job removal from the job list error.\n");
+			//		freeJob(job); // free this job
 		      return;
 		    }
 		//}
