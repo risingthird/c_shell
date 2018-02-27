@@ -1,6 +1,7 @@
 #include "run_command.h"
 
 #define WAIT_ANY -1
+#define FAIL -1
 #define FALSE 0
 #define TRUE 1
 //need to implement joblock() and jobunlock() to protect joblist
@@ -15,6 +16,12 @@ void put_job_in_foreground(Job* job);
 int myShTerminal;
 pid_t myShPGid;
 struct termios myShTmodes;
+
+// built-in command: jobs
+void bJobs() {
+	printList();
+	return;
+}
 
 void bKill(char** args, int argn) {
 	int kill_flag = FALSE; //kill_flag is true when input has -9
@@ -196,7 +203,7 @@ void bFg(char** args, int argn) {
 
 }
 
-// cound be "bg %        number" or "bg %number"
+// could be "bg %        number" or "bg %number"
 void bBg(char** args, int argn) {
 	Job* current_job = NULL;
 	/*if(argn == 1)
@@ -276,4 +283,72 @@ int exeBuiltIn(char** args, int argn) {
 	}
 	else
 		perror("invalid input, check_built_in wrong probably\n");
+}
+
+// not supporting pipe for now.
+// executing the command without pipe. Example: emacs shell.c; or emacs shell.c &
+int executing_command_without_pipe(Job *job) {
+	pid_t pid;
+	int status;
+	//Job *childjob;
+	char** args = job->processList->args;
+	int argn = job->processList->argn;
+	// check if the this job is built-in command, foreground, or background
+	// TODO: check_built_in(), exeBuiltIn(), if this job is built-in command
+	if (check_built_in(job)) {
+		exeBuiltIn(args, argn);
+	}
+	// If it is foreground job
+	else if(job->field == JOBFORE) {
+		pid = fork();
+		if (pid == 0) {
+			//child process
+			// execute the command
+			if((execvp(args[0], args)) == FAIL) {
+				printf("Didn't execute the command: %s! Either don't know what it is, or it is unavailable. \n", command_line[0]);
+      			exit(EXIT_FAILURE);
+			}
+		} else if (pid > 0) {
+			// parent process
+			waitpid(pid, &status, WUNTRACED);
+			// if the signal is termination (WIFSIGNALED) or normal exit, remove the job and free the memory.
+			if (WIFSIGNALED(status) || WIFEXITED(status)) {
+				if(jobRemovePid(getpgid(pid)))
+					printf("Job removal from the job list error.\n");
+				freeJob(job);
+			} else if (WIFSTOPPED(status)) {
+			// else if the signal is stop, update the job's field, put it into background (save termios), 
+				job->field = JOBBACK;
+				tcgetattr(myShTerminal, &job->j_Tmodes);
+			} else
+				printf("Error in parent process");
+		} else {
+			perror("Forking error!");
+			exit(EXIT_FAILURE);
+		}
+	} else if(job->field == JOBBACK) {
+		// if this job is background job
+		pid = fork();
+		if (pid == 0) {
+			//child process
+			// execute the command
+			if((execvp(args[0], args)) == FAIL) {
+				printf("Didn't execute the command: %s! Either don't know what it is, or it is unavailable. \n", command_line[0]);
+      			exit(EXIT_FAILURE);
+			}
+		} else if (pid > 0) {
+			// parent process
+			waitpid(pid, &status, WNOHANG);
+			// if the signal is termination (WIFSIGNALED) or normal exit, remove the job and free the memory.
+			if (WIFSIGNALED(status) || WIFEXITED(status)) {
+				if(jobRemovePid(getpgid(pid)))
+					printf("Job removal from the job list error.\n");
+				freeJob(job);
+			} else
+				printf("Error in parent process");
+		} else {
+			perror("Forking error!");
+			exit(EXIT_FAILURE);
+		}
+	}
 }
