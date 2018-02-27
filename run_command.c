@@ -291,7 +291,7 @@ void executing_command_without_pipe(Job *job, sigset_t child_mask) {
 	// check if the this job is built-in command, foreground, or background
 	// TODO: check_built_in(), exeBuiltIn(), if this job is built-in command
 	if (check_built_in(job)) {
-		exeBuiltIn(args, argn);
+		exeBuiltIn(args, argn, child_mask);
 	}
 	// If it is foreground job
 	else if(job->field == JOBFORE) {

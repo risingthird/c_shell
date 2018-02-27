@@ -149,7 +149,7 @@ int main(int argc, char** argv) {
     	sigaddset(&block_mask, SIGTTOU);
     	sigaddset(&block_mask, SIGTTIN);
     	sigprocmask(SIG_BLOCK, &block_mask, NULL);
-	sigemptyset(child_mask);
+	sigemptyset(&child_mask);
 	sigaddset(&child_mask, SIGINT);
     	sigaddset(&child_mask, SIGTSTP);
     	sigaddset(&child_mask, SIGTERM);
