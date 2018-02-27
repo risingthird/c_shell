@@ -313,7 +313,7 @@ void executing_command_without_pipe(Job *job, sigset_t child_mask) {
 			// if the signal is termination (WIFSIGNALED) or normal exit, remove the job and free the memory.
 			if (WIFSIGNALED(status) || WIFEXITED(status)) {
 				jobs_lock(child_mask);
-				jobRemovePid(getpgid(pid));
+				jobRemovePid(pid);
 				jobs_unlock(child_mask);
 				freeJob(job);
 			} else if (WIFSTOPPED(status)) {
