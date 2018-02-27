@@ -216,7 +216,7 @@ int main(int argc, char** argv) {
             	printf("Add job fail!\n");
             	exit(1);
             }
-            executing_command_without_pipe(job);
+            executing_command_without_pipe(job, child_mask);
 		}
 
 
