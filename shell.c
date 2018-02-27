@@ -63,7 +63,8 @@ void sigchld_handler(int sig, siginfo_t *sif, void *notused) {
 		    if (WIFSTOPPED(sif->si_status)) 
 		    {
 					jobChangeStatus(job, JOBSTOP);
-					printJobStatus(job);
+					last_suspended = job->jobId;
+			    		printJobStatus(job);
 		      return;
 		    }
 		    if ( (WTERMSIG(sif->si_status) <= 12) || (WTERMSIG(sif->si_status) == 15))
