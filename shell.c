@@ -33,7 +33,9 @@ sigset_t child_mask;
 void sigchld_handler(int sig, siginfo_t *sif, void *notused) {
 	//int status;
 	// first get the process id of the child process and get the pgid of the child process
-	pid_t pgid = getpgid(sif->si_pid);
+  //printf("%d\n", sif->si_pid);
+  //pid_t pgid = getpgid(sif->si_pid);
+  pid_t pgid = sif->si_pid;
 	if(pgid == NEGATIVE) {
 		perror("Get pgid error:");
 		exit(EXIT_FAILURE);
@@ -148,7 +150,7 @@ int main(int argc, char** argv) {
 	
 	sigset_t block_mask;
 
-    	sigaddset(&block_mask, SIGINT);
+    	//sigaddset(&block_mask, SIGINT);
     	sigaddset(&block_mask, SIGTSTP);
     	sigaddset(&block_mask, SIGTERM);
     	sigaddset(&block_mask, SIGQUIT);
@@ -156,7 +158,7 @@ int main(int argc, char** argv) {
     	sigaddset(&block_mask, SIGTTIN);
     	sigprocmask(SIG_BLOCK, &block_mask, NULL);
 	sigemptyset(&child_mask);
-	sigaddset(&child_mask, SIGINT);
+	//sigaddset(&child_mask, SIGINT);
     	sigaddset(&child_mask, SIGTSTP);
     	sigaddset(&child_mask, SIGTERM);
     	sigaddset(&child_mask, SIGQUIT);
@@ -164,7 +166,7 @@ int main(int argc, char** argv) {
     	sigaddset(&child_mask, SIGTTIN);
 	sigaddset(&child_mask, SIGCHLD);
 
-
+	signal(SIGINT, SIG_IGN);
 	int numCommands;
 	int numArguments;
 	int numSegments;

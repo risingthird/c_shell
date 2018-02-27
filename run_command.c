@@ -305,7 +305,11 @@ void executing_command_without_pipe(Job *job, sigset_t child_mask) {
 			setpgrp(); // set the pgid of the child process
 			job->pgid = getpgrp(); 
 			//child process
+			signal(SIGINT, SIG_DFL);
+
 			// execute the command
+			//printf("%d %d %d \n",getpgid(getpid()), getpid(), getppid());
+			tcsetpgrp(myShTerminal, getpid());
 			if((execvp(args[0], args)) == FAIL) {
 				printf("Didn't execute the command: %s! Either don't know what it is, or it is unavailable. \n", args[0]);
       			exit(EXIT_FAILURE);
@@ -315,12 +319,14 @@ void executing_command_without_pipe(Job *job, sigset_t child_mask) {
 			setpgid(pid, 0); // set the pgid of the child process
 			job->pgid = pid;
 			waitpid(pid, &status, WUNTRACED);
+			printf("Test!\n");
 			// if the signal is termination (WIFSIGNALED) or normal exit, remove the job and free the memory.
 			if (WIFSIGNALED(status) || WIFEXITED(status)) {
 				jobs_lock(child_mask);
 				jobRemovePid(pid);
 				jobs_unlock(child_mask);
-				freeJob(job);
+				return;
+				//freeJob(job);
 			} else if (WIFSTOPPED(status)) {
 			// else if the signal is stop, update the job's field, put it into background (save termios), 
 				job->field = JOBBACK;
@@ -330,6 +336,7 @@ void executing_command_without_pipe(Job *job, sigset_t child_mask) {
 
     			/* Restore the shell’s terminal modes.  */
     			tcsetattr (myShTerminal, TCSADRAIN, &myShTmodes);
+			return;
 			} else
 				printf("Error in parent process");
 		} else {
@@ -343,6 +350,8 @@ void executing_command_without_pipe(Job *job, sigset_t child_mask) {
 			//child process
 			setpgrp(); // set the pgid of the child process
 			job->pgid = getpgrp(); 
+			//sigemptyset(&block_mask);
+			signal(SIGINT, SIG_DFL);
 			// execute the command
 			if((execvp(args[0], args)) == FAIL) {
 				printf("Didn't execute the command: %s! Either don't know what it is, or it is unavailable. \n", args[0]);
@@ -358,7 +367,8 @@ void executing_command_without_pipe(Job *job, sigset_t child_mask) {
 				jobs_lock(child_mask);
 				jobRemovePid(getpgid(pid));
 				jobs_unlock(child_mask);
-				freeJob(job);
+				//freeJob(job);
+				return;
 			} else
 				printf("Error in parent process");
 		} else {
