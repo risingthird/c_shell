@@ -148,7 +148,7 @@ int parseArguments(char* segments, char** arguments) {
 				segments = realloc(segments, num_arguments * sizeof(char*));
 		}*/
 	}
-	int temp = strlen(arguments[count-1];
+	int temp = strlen(arguments[count-1]);
 	if (temp == 1 && arguments[count-1][temp-1] == '&') {
 		foreground = -1;
 		free(arguments[count-1]);
