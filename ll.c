@@ -147,7 +147,7 @@ void jobChangeStatus(Job* job, int status) {
 void printList() {
 	Node* temp = head->next;
 	while(temp->job != NULL) {
-		if (temp-->job->status == JOBCOMP) {
+		if (temp->job->status == JOBCOMP) {
 			printf("[%d] Done                     %s", temp->next->job->jobId, temp->next->job->line);
 		}
 		else if(temp->job->status ==  JOBSTOP) {
