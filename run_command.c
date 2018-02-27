@@ -1,21 +1,11 @@
 #include "run_command.h"
 
-#define WAIT_ANY -1
-#define FAIL -1
-#define FALSE 0
-#define TRUE 1
+
 //need to implement joblock() and jobunlock() to protect joblist
 //void jobunlock();
 //void joblock();
 
-//prototype
-void bFg(char** args, int argn);
-void put_job_in_foreground(Job* job);
 
-//global variable, Probably need to use extern
-int myShTerminal;
-pid_t myShPGid;
-struct termios myShTmodes;
 
 // built-in command: jobs
 void bJobs() {
