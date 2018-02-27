@@ -242,7 +242,38 @@ void bBg(char** args, int argn) {
 
 
 }
+int check_built_in(Job* job) {
+	char** args = job->processList->args;
+	int argn = job->processList->argn;
+	if(strcmp(args[0],"kill") == 0) {
+		return TRUE;
+	}
+	else if (strcmp(args[0],"fg") == 0) {
+		return TRUE;
+	}
+	else if (strcmp(args[0],"bg") == 0) {
+		return TRUE;
+	}
+	else if (strcmp(args[0],"exit") == 0) {
+		return TRUE;
+	}
+	else
+		return FALSE;
+}
 
 int exeBuiltIn(char** args, int argn) {
-	if (args)
+	if(strcmp(args[0],"kill") == 0) {
+		bKill(args, argn);
+	}
+	else if (strcmp(args[0],"fg") == 0) {
+		bFg(args, argn)
+	}
+	else if (strcmp(args[0],"bg") == 0) {
+		bBg(args, argn)
+	}
+	else if (strcmp(args[0],"exit") == 0) {
+		bExit(); // todo
+	}
+	else
+		perror("invalid input, check_built_in wrong probably\n");
 }
