@@ -365,3 +365,11 @@ void bExit() {
 	freeJobList();
 	exit(EXIT_SUCCESS);
 }
+
+void jobs_lock() {
+    sigprocmask(SIG_BLOCK, &child_mask, NULL);
+}
+
+void jobs_unlock() {
+    sigprocmask(SIG_UNBLOCK, &child_mask, NULL);
+}
