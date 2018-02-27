@@ -39,7 +39,7 @@ void sigchld_handler(int sig, siginfo_t *sif, void *notused) {
 	//int status;
 	// first get the process id of the child process and get the pgid of the child process
 	pid_t pgid = getpgid(sif->si_pid);
-	if(pgid = NEGATIVE) {
+	if(pgid == NEGATIVE) {
 		perror("Get pgid error:");
 		exit(EXIT_FAILURE);
 	}
@@ -135,7 +135,6 @@ int main(int argc, char** argv) {
 		// print our shell prompt
 		ourPrompt();
 		command = (char**) malloc(MAXLINE * sizeof(char*));
-		myPrompt();
 		if((line = readline(">>>>>>>")) == NULL) {
 			perror("IO error\n");
 			free(command);
