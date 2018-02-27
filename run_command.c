@@ -189,7 +189,7 @@ void bFg(char** args, int argn) {
 	}
 	*/
 
-
+	//should add a flag to determine whether job used to be stopped
 	put_job_in_foreground(current_job);
 
 }
