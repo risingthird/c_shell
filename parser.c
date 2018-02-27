@@ -121,6 +121,7 @@ int parseSegments(char* command, char** segments) {
 int parseArguments(char* segments, char** arguments) {
 	int count  = 0;
 	int i = 0;
+	int foreground = 1; //  will change to -1 if it's in background
 	int num_arguments = DEFAULT_NUM_ARG;
 	char* split;
 
@@ -147,6 +148,16 @@ int parseArguments(char* segments, char** arguments) {
 				segments = realloc(segments, num_arguments * sizeof(char*));
 		}*/
 	}
+	int temp = strlen(arguments[count-1];
+	if (temp == 1 && arguments[count-1][temp-1] == '&') {
+		foreground = -1;
+		free(arguments[count-1]);
+		count--;
+	} 
+	else if (arguments[count-1][temp-1] == '&') {
+		foreground = -1;
+		arguments[count-1][temp-1] = '\0';
+	}
 
-	return count;
+	return count*foreground;
 }
