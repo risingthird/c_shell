@@ -7,6 +7,7 @@
 void bKill(char** args, int argn);
 void bFg(char** args, int argn);
 void bBg(char** args, int argn);
+void bExit();
 int exeJ(Job* job);
 int exeBuiltIn(char** args, int argn);
 int changeDirectory(char** args);
