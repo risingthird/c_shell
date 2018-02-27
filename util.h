@@ -1,3 +1,5 @@
+#ifndef UTIL_
+#define UTIL_
 #include <stdio.h>
 #include <stdlib.h>
 #include <limits.h>
@@ -27,3 +29,4 @@ enum {PROCCOMP, PROCSTOP, PROCRUN}; // PROCCOMP 0, PROCSTOP 1, PROCRUN 2
 #define PROCSTOP 1
 #define PROCRUN 2
 */
+#endif
