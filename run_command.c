@@ -234,6 +234,7 @@ void bBg(char** args, int argn) {
 	//update job status
 	current_job->field = JOBBACK;
 	current_job->status = JOBRUN;
+	last_backgrounded = current_job->jobId;
 	pid_t current_pgid = -1 * current_job->pgid;
 	if(kill(current_pgid, SIGCONT) < 0)
 		perror("kill (SIGCONT)");
