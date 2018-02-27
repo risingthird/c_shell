@@ -352,3 +352,8 @@ int executing_command_without_pipe(Job *job) {
 		}
 	}
 }
+
+void bExit() {
+	freeJobList();
+	exit(EXIT_SUCCESS);
+}
