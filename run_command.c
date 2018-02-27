@@ -86,7 +86,7 @@ void bKill(char** args, int argn) {
 }
 
 
-void put_job_in_foreground(Job* job) {
+void put_job_in_foreground(Job* job, sigset_t child_mask) {
 	pid_t pid;
 	int status;
 	//put the job into foreground;
@@ -117,9 +117,9 @@ void put_job_in_foreground(Job* job) {
 	//printjob(job->id);
 	//if the job complete, we exit the job
 	if(job->status == JOBCOMP) {
-		jobs_lock(); //need to implement, block all the possible access to job list
+		jobs_lock(child_mask); //need to implement, block all the possible access to job list
 		jobRemoveJobId(job->jobId);
-		jobs_unlock();
+		jobs_unlock(child_mask);
 	}
 
 	if(job->status == JOBSTOP) {
@@ -282,7 +282,7 @@ int exeBuiltIn(char** args, int argn) {
 
 // not supporting pipe for now.
 // executing the command without pipe. Example: emacs shell.c; or emacs shell.c &
-void executing_command_without_pipe(Job *job) {
+void executing_command_without_pipe(Job *job, sigset_t child_mask) {
 	pid_t pid;
 	int status;
 	//Job *childjob;
@@ -312,9 +312,9 @@ void executing_command_without_pipe(Job *job) {
 			waitpid(pid, &status, WUNTRACED);
 			// if the signal is termination (WIFSIGNALED) or normal exit, remove the job and free the memory.
 			if (WIFSIGNALED(status) || WIFEXITED(status)) {
-				jobs_lock();
+				jobs_lock(child_mask);
 				jobRemovePid(getpgid(pid));
-				jobs_unlock();
+				jobs_unlock(child_mask);
 				freeJob(job);
 			} else if (WIFSTOPPED(status)) {
 			// else if the signal is stop, update the job's field, put it into background (save termios), 
@@ -350,9 +350,9 @@ void executing_command_without_pipe(Job *job) {
 			waitpid(pid, &status, WNOHANG);
 			// if the signal is termination (WIFSIGNALED) or normal exit, remove the job and free the memory.
 			if (WIFSIGNALED(status) || WIFEXITED(status)) {
-				jobs_lock();
+				jobs_lock(child_mask);
 				jobRemovePid(getpgid(pid));
-				jobs_unlock();
+				jobs_unlock(child_mask);
 				freeJob(job);
 			} else
 				printf("Error in parent process");
@@ -368,10 +368,10 @@ void bExit() {
 	exit(EXIT_SUCCESS);
 }
 
-void jobs_lock() {
+void jobs_lock(sigset_t child_mask) {
     sigprocmask(SIG_BLOCK, &child_mask, NULL);
 }
 
-void jobs_unlock() {
+void jobs_unlock(sigset_t child_mask) {
     sigprocmask(SIG_UNBLOCK, &child_mask, NULL);
 }
