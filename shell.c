@@ -5,7 +5,7 @@ structure inspired by: https://github.com/jmreyes/simple-c-shell/blob/master/sim
 #include <stdio.h>
 #include <sys/types.h>
 #include <signal.h>
-#include <sys/wait.h>
+//#include <sys/wait.h>
 #include <fcntl.h>
 #include <termios.h>
 #include <pwd.h>

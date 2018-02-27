@@ -2,7 +2,7 @@
 
 
 
-int jobInit() {
+void jobInit() {
 	head = malloc(sizeof(Node));
 	tail = malloc(sizeof(Node));
 	head->prev = NULL;
