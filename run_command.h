@@ -13,3 +13,4 @@ int executing_command_without_pipe(Job* job);
 int exeBuiltIn(char** args, int argn);
 int changeDirectory(char** args);
 int check_built_in(Job* job);
+void put_job_in_foreground(Job* job);
