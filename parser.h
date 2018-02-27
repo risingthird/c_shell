@@ -1,3 +1,6 @@
+#ifndef UTIL_
+#define UTIL_
+
 #include "util.h"
 
 
@@ -8,3 +11,4 @@ int parseSegments(char* command, char** segments);
 int parseArguments(char* segments, char** arguments);
 int check_last_character_in_process(char* process_line);
 
+#endif
