@@ -104,7 +104,7 @@ void put_job_in_foreground(Job* job) {
 	tcsetpgrp(myShTerminal, job->pgid);
 
 	//stroe the current shell status to its termios
-	tcgetattr(myShTerminal, &myShTmodes);
+	//tcgetattr(myShTerminal, &myShTmodes);
 
 	//restore the terminal attributes when the job stopped last time
 	tcsetattr(myShTerminal, TCSADRAIN, &job->j_Tmodes);
@@ -133,6 +133,7 @@ void put_job_in_foreground(Job* job) {
 	}
 
 	if(job->status == JOBSTOP) {
+		//if job has been suspended, we store its termios
 		tcgetattr(myShTerminal, &job->j_Tmodes);
 	}
 
