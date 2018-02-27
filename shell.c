@@ -28,6 +28,7 @@ char** args; // arguments in each *command
 char** command; // command line that has been separated by ";"
 char* line; // the whole command line
 char* jobLine; // things we will store in job struct
+sigset_t child_mask;
 
 void sigchld_handler(int sig, siginfo_t *sif, void *notused) {
 	//int status;
@@ -147,6 +148,14 @@ int main(int argc, char** argv) {
     	sigaddset(&block_mask, SIGTTOU);
     	sigaddset(&block_mask, SIGTTIN);
     	sigprocmask(SIG_BLOCK, &block_mask, NULL);
+	sigemptyset(child_mask);
+	sigaddset(&child_mask, SIGINT);
+    	sigaddset(&child_mask, SIGTSTP);
+    	sigaddset(&child_mask, SIGTERM);
+    	sigaddset(&child_mask, SIGQUIT);
+    	sigaddset(&child_mask, SIGTTOU);
+    	sigaddset(&child_mask, SIGTTIN);
+	sigaddset(&child_mask, SIGCHLD);
 
 
 	int numCommands;
