@@ -106,6 +106,10 @@ void ourPrompt() {
   return;
 }
 
+void initShell() {
+	
+}
+
 int main(int argc, char** argv) {
 	initShell();
 	jobInit();
@@ -138,14 +142,19 @@ int main(int argc, char** argv) {
 		numCommands = parseCommands(line, command);  // parse a command line into different
 													// processes (by ";")
 
+		
+
 		for(int i = 0; i < numCommands; i++){
 			jobLine = (char*) malloc(sizeof(char) * strlen(command[i]));
-			argsWithPipe = (char**) malloc(sizeof(char*) * MAXLEN);
+			args_without_pipe = (char**) malloc(sizeof(char*) * MAXLEN);
 			strcpy(jobLine, command[i]);
-			numSegments = parseSegments(command[i], argsWithPipe);
+			numArguments = parseArguments(command[i], args_without_pipe);
 
-			Process* dummy = (Process*) malloc(sizeof(Process));
-			Process* temp = dummy;
+			Process* toAdd = (Process*) malloc(sizeof(Process));
+			toAdd->args = args_without_pipe;
+			toAdd->argn = numArguments;
+			toAdd->next = NULL;
+			/*Process* temp = dummy;
 			for(int j = 0; j < numSegments; j++) {
 				args = (char**) malloc(sizeof(char*) * MAXLEN);
 				Process* toAdd = (Process*) malloc(sizeof(Process));
@@ -156,10 +165,24 @@ int main(int argc, char** argv) {
 
 				temp->next = toAdd;
 				temp = toAdd;
+			}*/
+			int field;
+			int status;
+			if (numArguments < 0) {
+				field = JOBBACK;
 			}
-			Job* job = createJob(jobLine, dummy->next, status);
+			else {
+				field = JOBFORE;
+			}
+			status = JOBRUN;
+			Job* job = createJob(jobLine, toAdd, status, field);
+
 			// I don't know what to do with status right now, will figure out in a moment 
-			free(dummy);
+			//free(dummy);// shouldn't free it here, process will be automatically freed when the job is removed from joblist
+            if(jobInsert(job) == FALSE) {
+            	printf("Add job fail!\n");
+            	exit(1);
+            }
             executing_command_without_pipe(job);
 		}
 
