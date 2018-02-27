@@ -1,5 +1,6 @@
 #ifndef UTIL_
 #define UTIL_
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <limits.h>
@@ -7,7 +8,8 @@
 #include <string.h>
 #include <readline/readline.h>
 #include <readline/history.h>
-
+#include <signal.h>
+#include <termios.h>
 
 #define DEFAULT_NUM_PROCESS 1024
 #define DEFAULT_NUM_SEGMENTS 1024
