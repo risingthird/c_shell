@@ -141,7 +141,7 @@ int main(int argc, char** argv) {
 	//initialize an empty set for signals to be blocked.
 	sigemptyset(&sa.sa_mask);
 	//set flags, SA_SIGINFO flag is to specify signal handler in sa is sa_sigaction.
-	sa.sa_flags = SA_SIGINFO;
+	sa.sa_flags = SA_SIGINFO | SA_RESTART;
 	//register the signal SIGCHLD.
 	sigaction(SIGCHLD, &sa, NULL);
 	
@@ -171,7 +171,7 @@ int main(int argc, char** argv) {
 		// print our shell prompt
 		ourPrompt();
 		command = (char**) malloc(MAXLINE * sizeof(char*));
-		if((line = readline(">>>>>>>")) == NULL) {
+		if((line = readline("")) == NULL) {
 			perror("IO error\n");
 			free(command);
 			freeJobList();
