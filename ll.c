@@ -3,8 +3,8 @@
 
 
 int jobInit() {
-	head = malloc(sizeof(LinkedList));
-	tail = malloc(sizeof(LinkedList));
+	head = malloc(sizeof(Node));
+	tail = malloc(sizeof(Node));
 	head->prev = NULL;
 	head->next = tail;
 	tail->prev = head;
@@ -208,7 +208,7 @@ void freeJob(Job* job) {
 
 void freeJobList() {
 	while(head->next->job != NULL) {
-		LinkedList* temp = head->next;
+		Node* temp = head->next;
 		head->next = temp->next;
 		freeJob(temp->job);
 		free(temp);
