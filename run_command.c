@@ -117,9 +117,9 @@ void put_job_in_foreground(Job* job) {
 	//printjob(job->id);
 	//if the job complete, we exit the job
 	if(job->status == JOBCOMP) {
-		joblock(job); //need to implement, block all the possible access to job list
+		jobs_lock(); //need to implement, block all the possible access to job list
 		jobRemoveJobId(job->jobId);
-		jobunlock(job);
+		jobs_unlock();
 	}
 
 	if(job->status == JOBSTOP) {
