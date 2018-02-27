@@ -115,6 +115,11 @@ void initShell() {
   else {
         if (tcgetattr(myShTerminal, &myShTmodes) != 0)
            perror("tcgetattr error");
+	if ((myShPGid = tcgetpgrp(myShTerminal)) < 0){
+	  perror("tcgetpgrp() failed");
+	}else{
+	  printf("The current foreground process group id of STDOUT: %d\n", (int)myShPGid);
+	}
         /*else {
            if (myShTmodes.c_lflag.c_iflag & IXON)
                printf("Terminal start and stop is enabled\n");
