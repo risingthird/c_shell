@@ -111,7 +111,7 @@ void initShell() {
 }
 
 int main(int argc, char** argv) {
-	initShell();
+	//initShell();
 	jobInit();
 	int status = 0;
 	/* Sigchild signal handling*/
@@ -125,6 +125,17 @@ int main(int argc, char** argv) {
 	sa.sa_flags = SA_SIGINFO;
 	//register the signal SIGCHLD.
 	sigaction(SIGCHLD, &sa, NULL);
+	
+	sigset_t block_mask;
+
+    	sigaddset(&block_mask, SIGINT);
+    	sigaddset(&block_mask, SIGTSTP);
+    	sigaddset(&block_mask, SIGTERM);
+    	sigaddset(&block_mask, SIGQUIT);
+    	sigaddset(&block_mask, SIGTTOU);
+    	sigaddset(&block_mask, SIGTTIN);
+    	sigprocmask(SIG_BLOCK, &block_mask, NULL);
+
 
 	int numCommands;
 	int numArguments;
