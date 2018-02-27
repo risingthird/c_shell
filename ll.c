@@ -178,7 +178,7 @@ void printJobStatus(Job* job) {
 		printf("[%d] Forcefully terminated                     %s", job->jobId, job->line);
 	else {
 		perror("Print status error!\n");
-		exit(EXIT_FAILURE)
+		exit(EXIT_FAILURE);
 	}
 }
 
