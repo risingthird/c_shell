@@ -136,7 +136,7 @@ void put_job_in_foreground(Job* job, sigset_t child_mask) {
 }
 
 
-void bFg(char** args, int argn) {
+void bFg(char** args, int argn, sigset_t child_mask) {
 	int jid; // get job id by args or use default setting
 	Job* current_job = NULL;
 	/*if(argn == 1)
@@ -190,7 +190,7 @@ void bFg(char** args, int argn) {
 	*/
 
 	//should add a flag to determine whether job used to be stopped
-	put_job_in_foreground(current_job);
+	put_job_in_foreground(current_job, child_mask);
 
 }
 
@@ -260,12 +260,12 @@ int check_built_in(Job* job) {
 		return FALSE;
 }
 
-int exeBuiltIn(char** args, int argn) {
+int exeBuiltIn(char** args, int argn, sigset_t child_mask) {
 	if(strcmp(args[0],"kill") == 0) {
 		bKill(args, argn);
 	}
 	else if (strcmp(args[0],"fg") == 0) {
-        bFg(args, argn);
+        bFg(args, argn, child_mask);
 	}
 	else if (strcmp(args[0],"bg") == 0) {
         bBg(args, argn);

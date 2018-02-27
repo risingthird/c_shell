@@ -115,12 +115,12 @@ void initShell() {
   else {
         if (tcgetattr(myShTerminal, &myShTmodes) != 0)
            perror("tcgetattr error");
-        else {
+        /*else {
            if (myShTmodes.c_lflag.c_iflag & IXON)
                printf("Terminal start and stop is enabled\n");
            if (myShTmodes.c_lflag.c_lflag & ICANON)
                printf("Terminal is in canonical mode\n");
-        }
+        }*/
      }
 }
 
