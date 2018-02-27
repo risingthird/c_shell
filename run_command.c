@@ -297,6 +297,8 @@ void executing_command_without_pipe(Job *job) {
 	else if(job->field == JOBFORE) {
 		pid = fork();
 		if (pid == 0) {
+			setpgrp(); // set the pgid of the child process
+			job->pgid = getpgrp(); 
 			//child process
 			// execute the command
 			if((execvp(args[0], args)) == FAIL) {
@@ -305,6 +307,8 @@ void executing_command_without_pipe(Job *job) {
 			}
 		} else if (pid > 0) {
 			// parent process
+			setpgid(pid, 0); // set the pgid of the child process
+			job->pgid = pid;
 			waitpid(pid, &status, WUNTRACED);
 			// if the signal is termination (WIFSIGNALED) or normal exit, remove the job and free the memory.
 			if (WIFSIGNALED(status) || WIFEXITED(status)) {
@@ -315,6 +319,11 @@ void executing_command_without_pipe(Job *job) {
 			// else if the signal is stop, update the job's field, put it into background (save termios), 
 				job->field = JOBBACK;
 				tcgetattr(myShTerminal, &job->j_Tmodes);
+				/* Put the shell back in the foreground.  */
+    			tcsetpgrp (myShTerminal, myShPGid);
+
+    			/* Restore the shell’s terminal modes.  */
+    			tcsetattr (myShTerminal, TCSADRAIN, &myShTmodes);
 			} else
 				printf("Error in parent process");
 		} else {
@@ -326,6 +335,8 @@ void executing_command_without_pipe(Job *job) {
 		pid = fork();
 		if (pid == 0) {
 			//child process
+			setpgrp(); // set the pgid of the child process
+			job->pgid = getpgrp(); 
 			// execute the command
 			if((execvp(args[0], args)) == FAIL) {
 				printf("Didn't execute the command: %s! Either don't know what it is, or it is unavailable. \n", args[0]);
@@ -333,6 +344,8 @@ void executing_command_without_pipe(Job *job) {
 			}
 		} else if (pid > 0) {
 			// parent process
+			setpgid(pid, 0); // set the pgid of the child process
+			job->pgid = pid;
 			waitpid(pid, &status, WNOHANG);
 			// if the signal is termination (WIFSIGNALED) or normal exit, remove the job and free the memory.
 			if (WIFSIGNALED(status) || WIFEXITED(status)) {
