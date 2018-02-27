@@ -31,7 +31,7 @@ Job* createJob(char* line, Process* process, int status, int field) {
 }
 
 Job* getJobJobId(int job_id) {
-	Node* temp = head;
+	Node* temp = head->next;
 	while(temp->next->job != NULL) {
 		if(temp->job->jobId == job_id) {
 			return temp->job;
