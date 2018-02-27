@@ -1,3 +1,6 @@
+#ifndef RUNCOMM_
+#define RUNCOMM_
+
 #include <signal.h>
 #include <string.h>
 #include <termios.h>
@@ -14,3 +17,4 @@ int exeBuiltIn(char** args, int argn);
 int changeDirectory(char** args);
 int check_built_in(Job* job);
 void put_job_in_foreground(Job* job);
+#endif
