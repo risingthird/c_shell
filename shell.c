@@ -148,21 +148,21 @@ int main(int argc, char** argv) {
 	//register the signal SIGCHLD.
 	sigaction(SIGCHLD, &sa, NULL);
 	
-	//sigset_t block_mask;
+	sigset_t block_mask;
     	//sigaddset(&block_mask, SIGINT);
 	
 	//ignore most signals in parent shell
-	signal(SIGINT, SIG_IGN);
-	signal(SIGTERM, SIG_IGN);
-	signal(SIGQUIT, SIG_IGN);
-	signal(SIGTTOU, SIG_IGN);
-	signal(SIGTTIN, SIG_IGN);
-//     	sigaddset(&block_mask, SIGTSTP);
-//     	sigaddset(&block_mask, SIGTERM);
-//     	sigaddset(&block_mask, SIGQUIT);
-//     	sigaddset(&block_mask, SIGTTOU);
-//     	sigaddset(&block_mask, SIGTTIN);
-//     	sigprocmask(SIG_BLOCK, &block_mask, NULL);
+	//signal(SIGINT, SIG_IGN);
+	//signal(SIGTERM, SIG_IGN);
+	//signal(SIGQUIT, SIG_IGN);
+	//signal(SIGTTOU, SIG_IGN);
+	//	signal(SIGTTIN, SIG_IGN);
+     	sigaddset(&block_mask, SIGTSTP);
+     	sigaddset(&block_mask, SIGTERM);
+     	sigaddset(&block_mask, SIGQUIT);
+     	sigaddset(&block_mask, SIGTTOU);
+     	sigaddset(&block_mask, SIGTTIN);
+     	sigprocmask(SIG_BLOCK, &block_mask, NULL);
 	sigemptyset(&child_mask);
 	sigaddset(&child_mask, SIGINT);
     	sigaddset(&child_mask, SIGTSTP);
@@ -195,6 +195,7 @@ int main(int argc, char** argv) {
 			jobLine = (char*) malloc(sizeof(char) * strlen(command[i]));
 			args_without_pipe = (char**) malloc(sizeof(char*) * MAXLEN);
 			strcpy(jobLine, command[i]);
+			bzero(args_without_pipe, MAXLEN);
 			numArguments = parseArguments(command[i], args_without_pipe);
 
 			Process* toAdd = (Process*) malloc(sizeof(Process));
