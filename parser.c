@@ -127,13 +127,13 @@ int parseArguments(char* segments, char** arguments) {
 	char* split;
 
 	if((split = strtok(segments, " \n\t")) == NULL) {
-		int llen = strlen(segments);
-		arguments[count] = malloc(llen+1);
-		bzero(arguments[count], llen+1);
-		strcpy(arguments[count], segments);
-		if (llen != 0) {
-			count++;
-		}
+		// int llen = strlen(segments);
+		// arguments[count] = malloc(llen+1);
+		// bzero(arguments[count], llen+1);
+		// strcpy(arguments[count], segments);
+		// if (llen != 0) {
+		// 	count++;
+		// }
 		return count;
 	}
 	int len;
