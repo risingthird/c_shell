@@ -253,7 +253,9 @@ int main(int argc, char** argv) {
             }
             executing_command_without_pipe(job, child_mask);
             
-            if (check_built_in(job) && freeJob(job));
+            if (check_built_in(job)) {
+            	freeJob(job);
+            }
             
             Node* temp = head->next;
             while(temp != NULL && temp->job != NULL) {
