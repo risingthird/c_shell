@@ -252,6 +252,9 @@ int main(int argc, char** argv) {
             	exit(1);
             }
             executing_command_without_pipe(job, child_mask);
+            
+            if (check_built_in(job) && freeJob(job));
+            
             Node* temp = head->next;
             while(temp != NULL && temp->job != NULL) {
             	if (temp->job->field == JOBBACK) {
