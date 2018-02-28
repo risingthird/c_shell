@@ -64,34 +64,35 @@ void bKill(char** args, int argn) {
 
 	//find the actual job
 	for(int i = 0; i < argn-2; i++) {
-	if(is_jid[i]) {
-		job[i] = getJobJobId(id[i]);
-	}
-	else {
-		job[i] = getJobPid(id[i]);
-	}
-	if(job[i] == NULL) {
-		printf("invalid job number or process number\n");
-		return;
-	}
-	//actually execute the kill
-	if(is_jid[i]) {
-		printf("kill by job %d\n", id[i]);
-	}
-	else {
-		printf("kill by process %d\n", id[i]);
-	}
+		if(is_jid[i]) {
+			job[i] = getJobJobId(id[i]);
+		}
+		else {
+			job[i] = getJobPid(id[i]);
+		}
+		if(job[i] == NULL) {
+			printf("invalid job number or process number\n");
+			return;
+		}
+		//actually execute the kill
+		if(is_jid[i]) {
+			printf("kill by job %d\n", id[i]);
+		}
+		else {
+			printf("kill by process %d\n", id[i]);
+		}
 
-	to_be_killed = (-1) * job[i]->pgid;
-    if(kill_flag){
-		if(kill(to_be_killed,SIGKILL) == -1)
-			perror("Kill failed\n");
-    }
-	else
-		if(kill(to_be_killed,SIGTERM) == -1)
-			perror("Kill failed\n");
+		to_be_killed = (-1) * job[i]->pgid;
+	    if(kill_flag) {
+			if(kill(to_be_killed,SIGKILL) == -1)
+				perror("Kill failed\n");
+	    }
+		else {
+			if(kill(to_be_killed,SIGTERM) == -1) {
+				perror("Kill failed\n");
+			}
+		}
 	}
-
 }
 // void bKill(char** args, int argn) {
 // 	int kill_flag = FALSE; //kill_flag is true when input has -9
