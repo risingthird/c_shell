@@ -261,6 +261,9 @@ int check_built_in(Job* job) {
 	else if (strcmp(args[0],"exit") == 0) {
 		return TRUE;
 	}
+	else if (strcmp(args[0],"jobs") == 0) {
+		return TRUE;
+	}
 	else
 		return FALSE;
 }
@@ -277,6 +280,9 @@ int exeBuiltIn(char** args, int argn, sigset_t child_mask) {
 	}
 	else if (strcmp(args[0],"exit") == 0) {
 		bExit(); // todo
+	}
+	else if (strcmp(args[0],"jobs") == 0) {
+		bJobs(); // todo
 	}
     else {
 		perror("invalid input, check_built_in wrong probably\n");
