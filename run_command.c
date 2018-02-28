@@ -82,7 +82,7 @@ void bKill(char** args, int argn) {
 		printf("kill by process %d\n", id[i]);
 	}
 
-	to_be_killed = (-1) * job->pgid;
+	to_be_killed = (-1) * job[i]->pgid;
     if(kill_flag){
 		if(kill(to_be_killed,SIGKILL) == -1)
 			perror("Kill failed\n");
