@@ -253,7 +253,7 @@ int main(int argc, char** argv) {
             }
             executing_command_without_pipe(job, child_mask);
             Node* temp = head->next;
-            while(temp != Null && temp->job != NULL) {
+            while(temp != NULL && temp->job != NULL) {
             	if (temp->job->field == JOBBACK) {
             		if (temp->job->status == JOBCOMP || temp->job->status == JOBTERM) {
             			jobs_lock(child_mask);
