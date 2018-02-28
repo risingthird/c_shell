@@ -238,7 +238,7 @@ void bFg(char** args, int argn, sigset_t child_mask) {
 	else {
 		for(int i = 1; i < argn; i++) {
 			if(i >= 2) {
-				continue;
+				break; // fg only supports for one argument, so we break here
 			}
 			if (args[i][0] == '%' && atoi(args[i]+1) != 0) {
 				current_job = getJobJobId(atoi(args[i]+1));
@@ -257,6 +257,10 @@ void bFg(char** args, int argn, sigset_t child_mask) {
 
 	//update job status
 	//first check whether the job used to be stopped
+	if(current_job == NULL) {
+		printf("fg: No such job exist!\n");
+		return;
+	}
 	if(current_job->field == JOBSTOP)
 		is_suspended = 1;
 	current_job->field = JOBFORE; //-- How do I know it is from stopped job or newly created job? how to keep track
@@ -542,6 +546,7 @@ void executing_command_without_pipe(Job *job, sigset_t child_mask) {
 		}
 	} else if(job->field == JOBBACK) {
 		// if this job is background job
+		last_backgrounded = job->jobId;
 		pid = fork();
 		sigemptyset(&child);
 		sigaddset(&child, SIGCHLD);
