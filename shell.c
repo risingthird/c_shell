@@ -180,6 +180,7 @@ int main(int argc, char** argv) {
 		// print our shell prompt
 		ourPrompt();
 		command = (char**) malloc(MAXLINE * sizeof(char*));
+		bzero(command, MAXLINE);
 		if((line = readline("")) == NULL) {
 			perror("IO error\n");
 			free(command);
