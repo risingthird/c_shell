@@ -44,6 +44,7 @@ void sigchld_handler(int sig, siginfo_t *sif, void *notused) {
 	Job* job = getJobPid(pgid);
 	if (job == NULL) {
 		printf("getJobPid has error.");
+		return;
 	}
 	//check whether the calling process is the one that has changed status, wait without blocking
 	//if (sif->si_pid == waitpid(pgid, &status, WUNTRACED)) {
