@@ -55,11 +55,11 @@ void bKill(char** args, int argn) {
 			}
 		}
 		else {
-			is_jid[i-1] = TRUE; // bugs here
-			if((id[i-1] = atoi(args[i])) == 0) {
-				printf("kill: usage: kill (signal) %%jid (or pid).Currently, signal only support -9, SIGKILL.\n");
-				return;
-			}
+		  //is_jid[i-1] = TRUE; // bugs here
+		  if((id[i-1] = atoi(args[i])) == 0) {
+		    printf("kill: usage: kill (signal) %%jid (or pid).Currently, signal only support -9, SIGKILL.\n");
+		    return;
+		  }
 		}
 	}
 
@@ -76,7 +76,10 @@ void bKill(char** args, int argn) {
 			job[i] = getJobJobId(id[i]);
 		}
 		else {
-			job[i] = getJobPid(id[i]);
+		  job[i] = getJobPid(id[i]);
+		  if(job[i] == NULL) {
+		    job[i] = getJobJobId(id[i]);
+		  }
 		}
 		if(job[i] == NULL) {
 			printf("invalid job number or process number\n");
