@@ -43,7 +43,7 @@ void sigchld_handler(int sig, siginfo_t *sif, void *notused) {
 	// Then get the job with pgid;
 	Job* job = getJobPid(pgid);
 	if (job == NULL) {
-		printf("getJobPid has error.");
+	  //printf("getJobPid has error.");
 		return;
 	}
 	//check whether the calling process is the one that has changed status, wait without blocking
@@ -196,7 +196,7 @@ int main(int argc, char** argv) {
 		  //perror("IO error\n");
 			free(command);
 			freeJobList();
-			printf("Exit the shell.\n");
+			perror("Exit the shell.\n Log out successfully.");
 			exit(EXIT_SUCCESS);
 		}
 		numCommands = parseCommands(line, command);  // parse a command line into different

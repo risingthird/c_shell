@@ -446,7 +446,13 @@ void bBg(char** args, int argn) {
 int check_built_in(Job* job) {
 	char** args = job->processList->args;
 	int argn = job->processList->argn;
-	if(strcmp(args[0],"kill") == 0) {
+	if(args == NULL) {
+	        return FALSE;
+	}
+	else if (args[0] == NULL) {
+	        return FALSE;
+	}
+	else if(strcmp(args[0],"kill") == 0) {
 		return TRUE;
 	}
 	else if (strcmp(args[0],"fg") == 0) {

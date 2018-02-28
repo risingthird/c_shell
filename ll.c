@@ -204,6 +204,7 @@ void freeArgs(char** args) {
 		free(args[count]);
 		count++;
 	}
+	args = NULL;
 	free(args);
 }
 
