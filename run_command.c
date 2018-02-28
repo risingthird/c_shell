@@ -330,6 +330,8 @@ void executing_command_without_pipe(Job *job, sigset_t child_mask) {
 				jobs_lock(child_mask);
 				jobRemovePid(pid);
 				jobs_unlock(child_mask);
+				tcsetpgrp (myShTerminal, myShPGid);
+				tcsetattr (myShTerminal, TCSADRAIN, &myShTmodes);
 				return;
 				//freeJob(job);
 			} else if (WIFSTOPPED(status)) {
