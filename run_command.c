@@ -199,6 +199,21 @@ void bFg(char** args, int argn, sigset_t child_mask) {
 
 }
 
+// void bBg(char** args, int argn) {
+// 	Job* current_job = NULL;
+// 	if (argn == 1) {
+// 		current_job = getJLastSuspended();
+// 	}
+// 	for(int i = 0; i < argn - 1; i++) {
+// 		if (args[i][0] == '%' && atoi(args[i]+1) != 0) {
+// 			current_job = getJobJobId(atoi(args[1]+1));
+// 		}
+// 		else if (atoi(args[i]) != 0) {
+
+// 		}
+// 	}
+// }
+
 // could be "bg %        number" or "bg %number"
 void bBg(char** args, int argn) {
 	Job* current_job = NULL;

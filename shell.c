@@ -229,6 +229,7 @@ int main(int argc, char** argv) {
 			int status;
 			if (numArguments < 0) {
 				field = JOBBACK;
+				toAdd->argn = -numArguments;
 			}
 			else if (numArguments > 0){
 				field = JOBFORE;
