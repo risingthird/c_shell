@@ -131,7 +131,9 @@ int parseArguments(char* segments, char** arguments) {
 		arguments[count] = malloc(llen+1);
 		bzero(arguments[count], llen+1);
 		strcpy(arguments[count], segments);
-		count++;
+		if (llen != 0) {
+			count++;
+		}
 		return count;
 	}
 	int len;
