@@ -32,7 +32,7 @@ Job* createJob(char* line, Process* process, int status, int field) {
 
 Job* getJobJobId(int job_id) {
 	Node* temp = head->next;
-	while(temp->job != NULL) {
+	while(temp != NULL && temp->job != NULL) {
 		if(temp->job->jobId == job_id) {
 			return temp->job;
 		}
@@ -45,7 +45,7 @@ Job* getJobJobId(int job_id) {
 
 Job* getJobPid(pid_t pid) {
 	Node* temp = head->next;
-	while(temp->job != NULL) {
+	while(temp != NULL && temp->job != NULL) {
 		if(temp->job->pgid == pid) {
 			return temp->job;
 		}
@@ -60,7 +60,7 @@ Job* getJobCommandName(char* command) {
 	Node* temp = head->next;
 	int count = 0;
 	Job* toReturn;
-	while(temp->job != NULL) {
+	while(temp != NULL && temp->job != NULL) {
 		if(strstr(temp->job->line, command) != NULL) {
 			toReturn = temp->job;
 			count++;
@@ -96,7 +96,7 @@ int jobInsert(Job* job) {
 
 int jobRemovePid(pid_t pid) {
 	Node* temp = head->next;
-	while(temp->job != NULL) {
+	while(temp != NULL && temp->job != NULL) {
 		if(temp->job->pgid == pid) {
 			Node* temp2 = temp->prev;
 			Node* temp3 = temp->next;
@@ -124,7 +124,7 @@ int jobRemovePid(pid_t pid) {
 
 int jobRemoveJobId(int job_id) {
 	Node* temp = head->next;
-	while(temp->job != NULL) {
+	while(temp != NULL && temp->job != NULL) {
 		if(temp->job->jobId == job_id) {
 			Node* temp2 = temp->prev;
 			Node* temp3 = temp->next;
@@ -162,18 +162,18 @@ void jobChangeStatus(Job* job, int status) {
 
 void printList() {
 	Node* temp = head->next;
-	while(temp->job != NULL) {
+	while(temp != NULL && temp->job != NULL) {
 		if (temp->job->status == JOBCOMP) {
-			printf("[%d] Done                     %s\n", temp->next->job->jobId, temp->next->job->line);
+			printf("[%d] Done                     %s\n", temp->job->jobId, temp->job->line);
 		}
 		else if(temp->job->status ==  JOBSTOP) {
-			printf("[%d] Stopped                     %s\n", temp->next->job->jobId, temp->next->job->line);
+			printf("[%d] Stopped                     %s\n", temp->job->jobId, temp->job->line);
 		}
 		else if(temp->job->status ==  JOBRUN) {
-			printf("[%d] Run                     %s\n", temp->next->job->jobId, temp->next->job->line);
+			printf("[%d] Run                     %s\n", temp->job->jobId,  temp->job->line);
 		}
 		else if (temp->job->status ==  JOBTERM) {
-			printf("[%d] Forcefully Terminated                     %s\n", temp->next->job->jobId, temp->next->job->line);
+			printf("[%d] Forcefully Terminated                     %s\n", temp->job->jobId, temp->job->line);
 		}
 		else {
 			perror("Print status error!\n");

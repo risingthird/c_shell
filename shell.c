@@ -252,6 +252,16 @@ int main(int argc, char** argv) {
             	exit(1);
             }
             executing_command_without_pipe(job, child_mask);
+            Node* temp = head->next;
+            while(temp != Null && temp->job != NULL) {
+            	if (temp->job->field == JOBBACK) {
+            		if (temp->job->status == JOBCOMP || temp->job->status == JOBTERM) {
+            			jobs_lock(child_mask);
+						jobRemovePid(temp->job->pgid);
+						jobs_unlock(child_mask);
+            		}
+            	}
+            }
 		}
 
 
