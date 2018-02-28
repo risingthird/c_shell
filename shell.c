@@ -113,9 +113,9 @@ void ourPrompt() {
 
   // root: /  guest/user: $
   if (geteuid() == 0)
-    printf("/ ");
+    printf("/");
   else
-    printf("$ ");
+    printf("$");
   return;
 }
 
@@ -193,10 +193,11 @@ int main(int argc, char** argv) {
 		command = (char**) malloc(MAXLINE * sizeof(char*));
 		bzero(command, MAXLINE);
 		if((line = readline(" ")) == NULL) {
-			perror("IO error\n");
+		  //perror("IO error\n");
 			free(command);
 			freeJobList();
-			exit(1);
+			printf("Exit the shell.\n");
+			exit(EXIT_SUCCESS);
 		}
 		numCommands = parseCommands(line, command);  // parse a command line into different
 													// processes (by ";")
