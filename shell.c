@@ -127,9 +127,10 @@ void initShell() {
            perror("tcgetattr error");
 	if ((myShPGid = tcgetpgrp(myShTerminal)) < 0){
 	  perror("tcgetpgrp() failed");
-	}else{
-	  printf("The current foreground process group id of STDOUT: %d\n", (int)myShPGid);
 	}
+	//else{
+	  //printf("The current foreground process group id of STDOUT: %d\n", (int)myShPGid);
+	//}
         /*else {
            if (myShTmodes.c_lflag.c_iflag & IXON)
                printf("Terminal start and stop is enabled\n");
@@ -229,8 +230,14 @@ int main(int argc, char** argv) {
 			if (numArguments < 0) {
 				field = JOBBACK;
 			}
-			else {
+			else if (numArguments > 0){
 				field = JOBFORE;
+			}
+			else {
+				free(jobLine);
+				freeArgs(args_without_pipe);
+				free(command);
+				break;
 			}
 			status = JOBRUN;
 			Job* job = createJob(jobLine, toAdd, status, field);
