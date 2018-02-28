@@ -185,13 +185,13 @@ void printList() {
 
 void printJobStatus(Job* job) {
 	if(job->status == JOBCOMP)
-		printf("[%d] Done                     %s\n", job->jobId, job->line);
+		printf("\n[%d] Done                     %s\n", job->jobId, job->line);
 	else if(job->status == JOBSTOP)
-		printf("[%d] Stopped                     %s\n", job->jobId, job->line);
+		printf("\n[%d] Stopped                     %s\n", job->jobId, job->line);
 	else if(job->status == JOBRUN)
-		printf("[%d] Run                     %s\n", job->jobId, job->line);
+		printf("\n[%d] Run                     %s\n", job->jobId, job->line);
 	else if(job->status == JOBTERM)
-		printf("[%d] Forcefully terminated                     %s\n", job->jobId, job->line);
+		printf("\n[%d] Forcefully terminated                     %s\n", job->jobId, job->line);
 	else {
 		perror("Print status error!\n");
 		exit(EXIT_FAILURE);
