@@ -310,6 +310,7 @@ void executing_command_without_pipe(Job *job, sigset_t child_mask) {
 			signal(SIGQUIT, SIG_DFL);
 			//signal(SIGTTOU, SIG_DFL);
 			signal(SIGTTIN, SIG_DFL);
+			signal(SIGTSTP, SIG_DFL);
 			// execute the command
 			//printf("%d %d %d \n",getpgid(getpid()), getpid(), getppid());
 			tcsetpgrp(myShTerminal, getpid());

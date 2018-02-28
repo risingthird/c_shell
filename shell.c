@@ -165,6 +165,7 @@ int main(int argc, char** argv) {
 	signal(SIGQUIT, SIG_IGN);
 	signal(SIGTTOU, SIG_IGN);
 	signal(SIGTTIN, SIG_IGN);
+	signal(SIGTSTP, SIG_IGN);
     // sigaddset(&block_mask, SIGTSTP);
     // sigaddset(&block_mask, SIGTERM);
     // sigaddset(&block_mask, SIGQUIT);
