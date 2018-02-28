@@ -53,11 +53,11 @@ void bKill(char** args, int argn) {
 				}
 				//sscanf(args[i],"%%%d", &id);
 			}
-			else {
-				if((id[i-2] = atoi(args[i])) == 0) {
-					printf("kill: usage: kill (signal) %%jid (or pid).Currently, signal only support -9, SIGKILL.\n");
-					return;
-				}
+		}
+		else {
+			if((id[i-2] = atoi(args[i])) == 0) {
+				printf("kill: usage: kill (signal) %%jid (or pid).Currently, signal only support -9, SIGKILL.\n");
+				return;
 			}
 		}
 	}
@@ -244,7 +244,7 @@ void bFg(char** args, int argn, sigset_t child_mask) {
 				current_job = getJobJobId(atoi(args[i]+1));
 			}
 			//if called by command name
-			else if(atoi(args[i]) != 0){
+			else if(atoi(args[i]) == 0){
 				//d
 				current_job = getJobCommandName(args[i]);
 			}
