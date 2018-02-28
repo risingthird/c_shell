@@ -44,7 +44,7 @@ void bKill(char** args, int argn) {
 			}
 		}
 		else if(args[i][0] == '%') {
-			is_jid[i-2] = TRUE;
+			is_jid[i-2] = TRUE; // bugs here
 			if(is_jid[i-2]) {
 
 				if((id[i-2] = atoi(args[i]+1)) == 0) {
@@ -483,7 +483,9 @@ void executing_command_without_pipe(Job *job, sigset_t child_mask) {
 	// check if the this job is built-in command, foreground, or background
 	// TODO: check_built_in(), exeBuiltIn(), if this job is built-in command
 	if (check_built_in(job)) {
+		job->status = JOBCOMP;
 		exeBuiltIn(args, argn, child_mask);
+		jobRemoveJobId(job->jobId);
 	}
 	// If it is foreground job
 	else if(job->field == JOBFORE) {
@@ -565,16 +567,16 @@ void executing_command_without_pipe(Job *job, sigset_t child_mask) {
 			setpgid(pid, 0); // set the pgid of the child process
 			job->pgid = pid;
 			sigprocmask(SIG_UNBLOCK, &child, NULL);
-			waitpid(pid, &status, WNOHANG);
-			// if the signal is termination (WIFSIGNALED) or normal exit, remove the job and free the memory.
-			if (WIFSIGNALED(status) || WIFEXITED(status)) {
-				jobs_lock(child_mask);
-				jobRemovePid(getpgid(pid));
-				jobs_unlock(child_mask);
-				//freeJob(job);
-				return;
-			} else
-				printf("Error in parent process");
+			// waitpid(pid, &status, WNOHANG);
+			// // if the signal is termination (WIFSIGNALED) or normal exit, remove the job and free the memory.
+			// if (WIFSIGNALED(status) || WIFEXITED(status)) {
+			// 	jobs_lock(child_mask);
+			// 	jobRemovePid(getpgid(pid));
+			// 	jobs_unlock(child_mask);
+			// 	//freeJob(job);
+			// 	return;
+			// } else
+			// 	printf("Error in parent process");
 		} else {
 			perror("Forking error!");
 			exit(EXIT_FAILURE);
