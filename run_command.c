@@ -15,12 +15,13 @@ void bJobs() {
 void bKill(char** args, int argn) {
 	int kill_flag = FALSE; //kill_flag is true when input has -9
 	int dash_flag = 0;
-	int percent_flag = 0;
-	int is_jid = FALSE;
-	int id;
-	Job* job;
+	int is_jid[argn-2];
+	int id[argn-2];
+	Job* job[argn-2];
 	int to_be_killed = 0;
-	if(argn == 1) {
+	bzero(id,argn-2);
+	bzero(is_jid,argn-2);
+	if(argn == 1 || argn == 2) {
 		printf("kill: usage: kill (signal) %%jid (or pid).Currently, signal only support -9, SIGKILL.\n");
 		return;
 	}
@@ -28,7 +29,7 @@ void bKill(char** args, int argn) {
 	//parse the arguments and send proper respond
 	for(int i = 1; i < argn; i++) {
 		//if the input is invalid, we will print usage of kill and return
-		if(dash_flag > 1 || percent_flag > 1) {
+		if(dash_flag > 1) {
 			printf("kill: usage: kill (signal) %%jid (or pid).Currently, signal only support -9, SIGKILL.\n");
 			return;
 		}
@@ -43,13 +44,17 @@ void bKill(char** args, int argn) {
 			}
 		}
 		else if(args[i][0] == '%') {
-			percent_flag ++;
-			is_jid = TRUE;
-			if(is_jid) {
-				sscanf(args[i],"%%%d", &id);
+			is_jid[i-2] = TRUE;
+			if(is_jid[i-2]) {
+
+				if((id[i-2] = atoi(args[i]+1)) == 0) {
+					printf("kill: usage: kill (signal) %%jid (or pid).Currently, signal only support -9, SIGKILL.\n");
+					return;
+				}
+				//sscanf(args[i],"%%%d", &id);
 			}
 			else {
-				if((id = atoi(args[i])) == 0) {
+				if((id[i-2] = atoi(args[i])) == 0) {
 					printf("kill: usage: kill (signal) %%jid (or pid).Currently, signal only support -9, SIGKILL.\n");
 					return;
 				}
@@ -58,21 +63,22 @@ void bKill(char** args, int argn) {
 	}
 
 	//find the actual job
-	if(is_jid) {
-		job = getJobJobId(id);
+	for(int i = 0; i < argn-2; i++) {
+	if(is_jid[i]]) {
+		job[i] = getJobJobId(id[i]);
 	}
 	else
-		job = getJobPid(id);
-	if(job == NULL) {
+		job[i] = getJobPid(id[i]);
+	if(job[i] == NULL) {
 		printf("invalid job number or process number\n");
 		return;
 	}
 	//actually execute the kill
-	if(is_jid) {
-		printf("kill by job %d\n", id);
+	if(is_jid[i]) {
+		printf("kill by job %d\n", id[i]);
 	}
 	else
-		printf("kill by process %d\n", id);
+		printf("kill by process %d\n", id[i]);
 
 	to_be_killed = (-1) * job->pgid;
     if(kill_flag){
@@ -82,8 +88,81 @@ void bKill(char** args, int argn) {
 	else
 		if(kill(to_be_killed,SIGTERM) == -1)
 			perror("Kill failed\n");
+	}
 
 }
+// void bKill(char** args, int argn) {
+// 	int kill_flag = FALSE; //kill_flag is true when input has -9
+// 	int dash_flag = 0;
+// 	int percent_flag = 0;
+// 	int is_jid = FALSE;
+// 	int id;
+// 	Job* job;
+// 	int to_be_killed = 0;
+// 	if(argn == 1) {
+// 		printf("kill: usage: kill (signal) %%jid (or pid).Currently, signal only support -9, SIGKILL.\n");
+// 		return;
+// 	}
+
+// 	//parse the arguments and send proper respond
+// 	for(int i = 1; i < argn; i++) {
+// 		//if the input is invalid, we will print usage of kill and return
+// 		if(dash_flag > 1 || percent_flag > 1) {
+// 			printf("kill: usage: kill (signal) %%jid (or pid).Currently, signal only support -9, SIGKILL.\n");
+// 			return;
+// 		}
+// 		if(args[i][0] == '-'){
+// 			dash_flag ++;
+// 			if(strcmp(args[i], "-9") == 0) {
+// 				kill_flag = TRUE; //probably we need to test whether kill_flag is false
+// 			}
+// 			else {
+// 				printf("kill: usage: kill (signal) %%jid (or pid).Currently, signal only support -9, SIGKILL.\n");
+// 				return;
+// 			}
+// 		}
+// 		else if(args[i][0] == '%') {
+// 			percent_flag ++;
+// 			is_jid = TRUE;
+// 			if(is_jid) {
+// 				sscanf(args[i],"%%%d", &id);
+// 			}
+// 			else {
+// 				if((id = atoi(args[i])) == 0) {
+// 					printf("kill: usage: kill (signal) %%jid (or pid).Currently, signal only support -9, SIGKILL.\n");
+// 					return;
+// 				}
+// 			}
+// 		}
+// 	}
+
+// 	//find the actual job
+// 	if(is_jid) {
+// 		job = getJobJobId(id);
+// 	}
+// 	else
+// 		job = getJobPid(id);
+// 	if(job == NULL) {
+// 		printf("invalid job number or process number\n");
+// 		return;
+// 	}
+// 	//actually execute the kill
+// 	if(is_jid) {
+// 		printf("kill by job %d\n", id);
+// 	}
+// 	else
+// 		printf("kill by process %d\n", id);
+
+// 	to_be_killed = (-1) * job->pgid;
+//     if(kill_flag){
+// 		if(kill(to_be_killed,SIGKILL) == -1)
+// 			perror("Kill failed\n");
+//     }
+// 	else
+// 		if(kill(to_be_killed,SIGTERM) == -1)
+// 			perror("Kill failed\n");
+
+// }
 
 
 void put_job_in_foreground(Job* job, sigset_t child_mask, int flag_stop) {
@@ -136,7 +215,6 @@ void put_job_in_foreground(Job* job, sigset_t child_mask, int flag_stop) {
 
 }
 
-
 void bFg(char** args, int argn, sigset_t child_mask) {
 	int jid; // get job id by args or use default setting
 	Job* current_job = NULL;
@@ -145,7 +223,6 @@ void bFg(char** args, int argn, sigset_t child_mask) {
 		jid = num_of_job(); // implemented by jiaping, get the number of job in a job list
 	else
 		jid = atoi(args[1]); //convert the input job id to int
-
 	current_job = getJobJobId(jid);
 	if(current_job == NULL) {
 		printf("job %d does not exist, we can find it\n", jid);
@@ -155,24 +232,24 @@ void bFg(char** args, int argn, sigset_t child_mask) {
 	if (argn == 1) {
 		current_job = getJLastBackgrounded();
 	}
-	else if (argn == 2){
-		if (args[1][0] == '%' && atoi(args[1]+1) != 0) {
-			current_job = getJobJobId(atoi(args[1]+1));
-		}
-		else {
-			printf("Pleas type in %%[number]\n");
-		}
-	}
-	else if(argn == 3) {
-		if ((strcmp(args[1],"%") == 0) && atoi(args[2]) != 0) {
-			current_job = getJobJobId(atoi(args[2]));
-		}
-		else {
-			printf("Pleas type in %%[number]\n");
-		}
-	}
 	else {
-		printf("Pleas type in %%[number]\n");
+		for(int i = 1; i < argn; i++) {
+			if(i >= 2) {
+				continue;
+			}
+			if (args[i][0] == '%' && atoi(args[i]+1) != 0) {
+				current_job = getJobJobId(atoi(args[i]+1));
+			}
+			//if called by command name
+			else if(atoi(args[i]) != 0){
+				//d
+				current_job = getJobCommandName(args[i]);
+			}
+			else {
+				current_job = getJobJobId(atoi(args[i]));
+			}
+
+		}
 	}
 
 	//update job status
@@ -185,19 +262,72 @@ void bFg(char** args, int argn, sigset_t child_mask) {
 	if(kill(current_pgid, SIGCONT) < 0)
 		perror("kill (SIGCONT)"); // send sigcont to all processes of that process group
 	//we can directly send a signal to a process group
-	/*
-	while(current_job_process != NULL) {
-		//need to implement kill()
-		kill(current_job_process->pid, SIGCONT)； // send sigcont to each process in job
-		current_job_process->status = PROCRUN; // set process to run status
-		current_job_process = current_job_process->next;
-	}
-	*/
 
 	//should add a flag to determine whether job used to be stopped
 	put_job_in_foreground(current_job, child_mask, is_suspended);
 
 }
+// void bFg(char** args, int argn, sigset_t child_mask) {
+// 	int jid; // get job id by args or use default setting
+// 	Job* current_job = NULL;
+// 	int is_suspended = 0;
+// 	/*if(argn == 1)
+// 		jid = num_of_job(); // implemented by jiaping, get the number of job in a job list
+// 	else
+// 		jid = atoi(args[1]); //convert the input job id to int
+
+// 	current_job = getJobJobId(jid);
+// 	if(current_job == NULL) {
+// 		printf("job %d does not exist, we can find it\n", jid);
+// 		return;
+// 	}*/
+
+// 	if (argn == 1) {
+// 		current_job = getJLastBackgrounded();
+// 	}
+// 	else if (argn == 2){
+// 		if (args[1][0] == '%' && atoi(args[1]+1) != 0) {
+// 			current_job = getJobJobId(atoi(args[1]+1));
+// 		}
+// 		else {
+// 			printf("Pleas type in %%[number]\n");
+// 		}
+// 	}
+// 	else if(argn == 3) {
+// 		if ((strcmp(args[1],"%") == 0) && atoi(args[2]) != 0) {
+// 			current_job = getJobJobId(atoi(args[2]));
+// 		}
+// 		else {
+// 			printf("Pleas type in %%[number]\n");
+// 		}
+// 	}
+// 	else {
+// 		printf("Pleas type in %%[number]\n");
+// 	}
+
+// 	//update job status
+// 	//first check whether the job used to be stopped
+// 	if(current_job->field == JOBSTOP)
+// 		is_suspended = 1;
+// 	current_job->field = JOBFORE; //-- How do I know it is from stopped job or newly created job? how to keep track
+// 	current_job->status = JOBRUN;
+// 	pid_t current_pgid = -1 * current_job->pgid;
+// 	if(kill(current_pgid, SIGCONT) < 0)
+// 		perror("kill (SIGCONT)"); // send sigcont to all processes of that process group
+// 	//we can directly send a signal to a process group
+// 	/*
+// 	while(current_job_process != NULL) {
+// 		//need to implement kill()
+// 		kill(current_job_process->pid, SIGCONT)； // send sigcont to each process in job
+// 		current_job_process->status = PROCRUN; // set process to run status
+// 		current_job_process = current_job_process->next;
+// 	}
+// 	*/
+
+// 	//should add a flag to determine whether job used to be stopped
+// 	put_job_in_foreground(current_job, child_mask, is_suspended);
+
+// }
 
 // void bBg(char** args, int argn) {
 // 	Job* current_job = NULL;
