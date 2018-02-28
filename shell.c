@@ -251,6 +251,9 @@ int main(int argc, char** argv) {
             	printf("Add job fail!\n");
             	exit(1);
             }
+            if (check_built_in(job)) {
+            	id--;
+            }
             executing_command_without_pipe(job, child_mask);
             
             if (check_built_in(job)) {
