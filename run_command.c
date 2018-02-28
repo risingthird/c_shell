@@ -55,6 +55,7 @@ void bKill(char** args, int argn) {
 			}
 		}
 		else {
+			is_jid[i-2] = TRUE; // bugs here
 			if((id[i-2] = atoi(args[i])) == 0) {
 				printf("kill: usage: kill (signal) %%jid (or pid).Currently, signal only support -9, SIGKILL.\n");
 				return;
