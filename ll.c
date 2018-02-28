@@ -148,16 +148,16 @@ void printList() {
 	Node* temp = head->next;
 	while(temp->job != NULL) {
 		if (temp->job->status == JOBCOMP) {
-			printf("[%d] Done                     %s", temp->next->job->jobId, temp->next->job->line);
+			printf("[%d] Done                     %s\n", temp->next->job->jobId, temp->next->job->line);
 		}
 		else if(temp->job->status ==  JOBSTOP) {
-			printf("[%d] Stopped                     %s", temp->next->job->jobId, temp->next->job->line);
+			printf("[%d] Stopped                     %s\n", temp->next->job->jobId, temp->next->job->line);
 		}
 		else if(temp->job->status ==  JOBRUN) {
-			printf("[%d] Run                     %s", temp->next->job->jobId, temp->next->job->line);
+			printf("[%d] Run                     %s\n", temp->next->job->jobId, temp->next->job->line);
 		}
 		else if (temp->job->status ==  JOBTERM) {
-			printf("[%d] Forcefully Terminated                     %s", temp->next->job->jobId, temp->next->job->line);
+			printf("[%d] Forcefully Terminated                     %s\n", temp->next->job->jobId, temp->next->job->line);
 		}
 		else {
 			perror("Print status error!\n");
@@ -169,13 +169,13 @@ void printList() {
 
 void printJobStatus(Job* job) {
 	if(job->status == JOBCOMP)
-		printf("[%d] Done                     %s", job->jobId, job->line);
+		printf("[%d] Done                     %s\n", job->jobId, job->line);
 	else if(job->status == JOBSTOP)
-		printf("[%d] Stopped                     %s", job->jobId, job->line);
+		printf("[%d] Stopped                     %s\n", job->jobId, job->line);
 	else if(job->status == JOBRUN)
-		printf("[%d] Run                     %s", job->jobId, job->line);
+		printf("[%d] Run                     %s\n", job->jobId, job->line);
 	else if(job->status == JOBTERM)
-		printf("[%d] Forcefully terminated                     %s", job->jobId, job->line);
+		printf("[%d] Forcefully terminated                     %s\n", job->jobId, job->line);
 	else {
 		perror("Print status error!\n");
 		exit(EXIT_FAILURE);
