@@ -266,6 +266,7 @@ int main(int argc, char** argv) {
 						jobs_unlock(child_mask);
             		}
             	}
+            	temp = temp->next;
             }
 		}
 
