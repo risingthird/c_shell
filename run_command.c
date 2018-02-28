@@ -15,13 +15,13 @@ void bJobs() {
 void bKill(char** args, int argn) {
 	int kill_flag = FALSE; //kill_flag is true when input has -9
 	int dash_flag = 0;
-	int is_jid[argn-2];
-	int id[argn-2];
-	Job* job[argn-2];
+	int is_jid[argn];
+	int id[argn];
+	Job* job[argn];
 	int to_be_killed = 0;
-	bzero(id,argn-2);
-	bzero(is_jid,argn-2);
-	if(argn == 1 || argn == 2) {
+	bzero(id,argn);
+	bzero(is_jid,argn);
+	if(argn == 1) {
 		printf("kill: usage: kill (signal) %%jid (or pid).Currently, signal only support -9, SIGKILL.\n");
 		return;
 	}
@@ -44,10 +44,10 @@ void bKill(char** args, int argn) {
 			}
 		}
 		else if(args[i][0] == '%') {
-			is_jid[i-2] = TRUE; // bugs here
-			if(is_jid[i-2]) {
+			is_jid[i-1] = TRUE; // bugs here
+			if(is_jid[i-1]) {
 
-				if((id[i-2] = atoi(args[i]+1)) == 0) {
+				if((id[i-1] = atoi(args[i]+1)) == 0) {
 					printf("kill: usage: kill (signal) %%jid (or pid).Currently, signal only support -9, SIGKILL.\n");
 					return;
 				}
@@ -55,8 +55,8 @@ void bKill(char** args, int argn) {
 			}
 		}
 		else {
-			is_jid[i-2] = TRUE; // bugs here
-			if((id[i-2] = atoi(args[i])) == 0) {
+			is_jid[i-1] = TRUE; // bugs here
+			if((id[i-1] = atoi(args[i])) == 0) {
 				printf("kill: usage: kill (signal) %%jid (or pid).Currently, signal only support -9, SIGKILL.\n");
 				return;
 			}
@@ -64,7 +64,14 @@ void bKill(char** args, int argn) {
 	}
 
 	//find the actual job
-	for(int i = 0; i < argn-2; i++) {
+	int i = 0;
+	int condition = argn - 1;
+	if(dash_flag > 0) {
+	  i = i + 1;
+	  condition = argn;
+	  
+	}
+	do {
 		if(is_jid[i]) {
 			job[i] = getJobJobId(id[i]);
 		}
@@ -89,11 +96,12 @@ void bKill(char** args, int argn) {
 				perror("Kill failed\n");
 	    }
 		else {
-			if(kill(to_be_killed,SIGTERM) == -1) {
-				perror("Kill failed\n");
-			}
+		  if(kill(to_be_killed,SIGTERM) == -1) {
+		    perror("Kill failed\n");
+		  }
 		}
-	}
+	    i++;
+	} while(i < condition); 
 }
 // void bKill(char** args, int argn) {
 // 	int kill_flag = FALSE; //kill_flag is true when input has -9
