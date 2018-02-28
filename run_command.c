@@ -556,6 +556,7 @@ void executing_command_without_pipe(Job *job, sigset_t child_mask) {
 			setpgrp(); // set the pgid of the child process
 			job->pgid = getpgrp(); 
 			//sigemptyset(&block_mask);
+			signal(SIGTSTP, SIG_DFL);
 			signal(SIGINT, SIG_DFL);
 			signal(SIGTERM, SIG_DFL);
 			signal(SIGQUIT, SIG_DFL);
