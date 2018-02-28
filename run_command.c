@@ -64,11 +64,12 @@ void bKill(char** args, int argn) {
 
 	//find the actual job
 	for(int i = 0; i < argn-2; i++) {
-	if(is_jid[i]]) {
+	if(is_jid[i]) {
 		job[i] = getJobJobId(id[i]);
 	}
-	else
+	else {
 		job[i] = getJobPid(id[i]);
+	}
 	if(job[i] == NULL) {
 		printf("invalid job number or process number\n");
 		return;
@@ -343,6 +344,35 @@ void bFg(char** args, int argn, sigset_t child_mask) {
 // 		}
 // 	}
 // }
+
+
+// void bBg(char** args, int argn) {
+// 	Job* current_job = NULL;
+// 	if (argn == 1) {
+// 		current_job = getJLastSuspended();
+// 	}
+// 	for(int i = 0; i < argn - 1; i++) {
+// 		if (args[i][0] == '%' && atoi(args[i]+1) != 0) {
+// 			current_job = getJobJobId(atoi(args[1]+1));
+// 		}
+// 		else if (atoi(args[i]) != 0) {
+// 			current_job = getJobJobId(atoi(args[1]));
+// 		}
+// 		else {
+// 			continue;
+// 		}
+// 		if (current_job == NULL) {
+// 			printf("job does not exist, we can find it\n");
+// 			continue;
+// 		}
+// 		else {
+
+// 		}
+
+// 	}
+// }
+
+
 
 // could be "bg %        number" or "bg %number"
 void bBg(char** args, int argn) {
