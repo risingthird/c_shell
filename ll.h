@@ -44,6 +44,7 @@ void jobInit();                  // initiate the job list.
 Job *createJob(char *line, Process *process, int status, int field);
 Job *getJobJobId(int job_id); // get the current job by job id
 Job *getJobPid(pid_t pid);    // get the current job by pid
+Job* getJobCommandName(char* command); // get the current job by name
 Job* getJLastSuspended();       // get the last suspended job
 Job* getJLastBackgrounded();    // get the last backgrounded job
 void printList();             // print the list

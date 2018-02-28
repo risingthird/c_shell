@@ -56,6 +56,22 @@ Job* getJobPid(pid_t pid) {
 	return NULL;
 }
 
+Job* getJobCommandName(char* command) {
+	Node* temp = head->next;
+	int count = 0;
+	Job* toReturn;
+	while(temp->job != NULL) {
+		if(strstr(temp->job->line, command) != NULL) {
+			toReturn = temp->job;
+			count++;
+		}
+		else {
+			temp = temp->next;
+		}
+	}
+	return (count > 1 ? NULL : toReturn);
+}
+
 Job* getJLastSuspended() {
 	return getJobJobId(last_suspended);
 }
