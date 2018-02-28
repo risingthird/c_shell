@@ -11,7 +11,7 @@ void jobInit() {
 	tail->next = NULL;
 	head->job = NULL;
 	tail->job = NULL;
-	id = 0;
+	id = 1;
 }
 
 Job* createJob(char* line, Process* process, int status, int field) {
