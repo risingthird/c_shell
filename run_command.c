@@ -104,6 +104,7 @@ void bKill(char** args, int argn) {
 		  }
 		}
 	    i++;
+	    sleep(0.1);
 	} while(i < condition); 
 }
 // void bKill(char** args, int argn) {
