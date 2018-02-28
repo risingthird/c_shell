@@ -476,6 +476,7 @@ int exeBuiltIn(char** args, int argn, sigset_t child_mask) {
 void executing_command_without_pipe(Job *job, sigset_t child_mask) {
 	pid_t pid;
 	int status;
+	sigset_t child;
 	//Job *childjob;
 	char** args = job->processList->args;
 	int argn = job->processList->argn;
@@ -540,6 +541,9 @@ void executing_command_without_pipe(Job *job, sigset_t child_mask) {
 	} else if(job->field == JOBBACK) {
 		// if this job is background job
 		pid = fork();
+		sigemptyset(&child);
+		sigaddset(&child, SIGCHLD);
+		sigprocmask(SIG_BLOCK, &child, NULL);
 		if (pid == 0) {
 			//child process
 			setpgrp(); // set the pgid of the child process
@@ -550,6 +554,7 @@ void executing_command_without_pipe(Job *job, sigset_t child_mask) {
 			signal(SIGQUIT, SIG_DFL);
 			signal(SIGTTOU, SIG_DFL);
 			signal(SIGTTIN, SIG_DFL);
+			sigprocmask(SIG_UNBLOCK, &child, NULL);
 			// execute the command
 			if((execvp(args[0], args)) == FAIL) {
 				printf("Didn't execute the command: %s! Either don't know what it is, or it is unavailable. \n", args[0]);
@@ -559,6 +564,7 @@ void executing_command_without_pipe(Job *job, sigset_t child_mask) {
 			// parent process
 			setpgid(pid, 0); // set the pgid of the child process
 			job->pgid = pid;
+			sigprocmask(SIG_UNBLOCK, &child, NULL);
 			waitpid(pid, &status, WNOHANG);
 			// if the signal is termination (WIFSIGNALED) or normal exit, remove the job and free the memory.
 			if (WIFSIGNALED(status) || WIFEXITED(status)) {
