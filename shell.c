@@ -53,7 +53,7 @@ void sigchld_handler(int sig, siginfo_t *sif, void *notused) {
 			 Else if the job is forced to terminate, update its status, print its status, remove it from the
 			 job list, and then free the memory.
 		*/
-		if (WIFEXITED(sif->si_status)) 
+		if (sif->si_code == CLD_EXITED) 
 		    {
 					jobChangeStatus(job, JOBCOMP);
 					printJobStatus(job);
@@ -62,14 +62,15 @@ void sigchld_handler(int sig, siginfo_t *sif, void *notused) {
 			//		freeJob(job); // free this job
 		      return;
 		    }
-		    if (WIFSTOPPED(sif->si_status)) 
+		    if (sif->si_code == CLD_STOPPED) 
 		    {
 					jobChangeStatus(job, JOBSTOP);
 					last_suspended = job->jobId;
 			    		printJobStatus(job);
 		      return;
 		    }
-		    if ( (WTERMSIG(sif->si_status) <= 12) || (WTERMSIG(sif->si_status) == 15))
+		    //if ( (WTERMSIG(sif->si_status) <= 12) || (WTERMSIG(sif->si_status) == 15))
+		    if (sif->si_code == CLD_KILLED)
 		    {
 					jobChangeStatus(job, JOBTERM);
 					printJobStatus(job);
@@ -152,27 +153,27 @@ int main(int argc, char** argv) {
     	//sigaddset(&block_mask, SIGINT);
 	
 	//ignore most signals in parent shell
-	//signal(SIGINT, SIG_IGN);
-	//signal(SIGTERM, SIG_IGN);
-	//signal(SIGQUIT, SIG_IGN);
-	//signal(SIGTTOU, SIG_IGN);
-	//	signal(SIGTTIN, SIG_IGN);
-     	sigaddset(&block_mask, SIGTSTP);
-     	sigaddset(&block_mask, SIGTERM);
-     	sigaddset(&block_mask, SIGQUIT);
-     	sigaddset(&block_mask, SIGTTOU);
-     	sigaddset(&block_mask, SIGTTIN);
-     	sigprocmask(SIG_BLOCK, &block_mask, NULL);
+	signal(SIGINT, SIG_IGN);
+	signal(SIGTERM, SIG_IGN);
+	signal(SIGQUIT, SIG_IGN);
+	signal(SIGTTOU, SIG_IGN);
+	signal(SIGTTIN, SIG_IGN);
+    // sigaddset(&block_mask, SIGTSTP);
+    // sigaddset(&block_mask, SIGTERM);
+    // sigaddset(&block_mask, SIGQUIT);
+    // sigaddset(&block_mask, SIGTTOU);
+    // sigaddset(&block_mask, SIGTTIN);
+    // sigprocmask(SIG_BLOCK, &block_mask, NULL);
 	sigemptyset(&child_mask);
 	sigaddset(&child_mask, SIGINT);
-    	sigaddset(&child_mask, SIGTSTP);
-    	sigaddset(&child_mask, SIGTERM);
-    	sigaddset(&child_mask, SIGQUIT);
-    	sigaddset(&child_mask, SIGTTOU);
-    	sigaddset(&child_mask, SIGTTIN);
+    sigaddset(&child_mask, SIGTSTP);
+    sigaddset(&child_mask, SIGTERM);
+    sigaddset(&child_mask, SIGQUIT);
+    sigaddset(&child_mask, SIGTTOU);
+    sigaddset(&child_mask, SIGTTIN);
 	sigaddset(&child_mask, SIGCHLD);
 
-	signal(SIGINT, SIG_IGN);
+	//signal(SIGINT, SIG_IGN);
 	int numCommands;
 	int numArguments;
 	int numSegments;
