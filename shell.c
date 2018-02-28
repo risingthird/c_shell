@@ -192,7 +192,7 @@ int main(int argc, char** argv) {
 		ourPrompt();
 		command = (char**) malloc(MAXLINE * sizeof(char*));
 		bzero(command, MAXLINE);
-		if((line = readline("")) == NULL) {
+		if((line = readline(" ")) == NULL) {
 			perror("IO error\n");
 			free(command);
 			freeJobList();
