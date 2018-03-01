@@ -258,7 +258,7 @@ int main(int argc, char** argv) {
             }
             executing_command_without_pipe(job, child_mask);
             
-            if (check_built_in(job)) {
+            if (job != NULL && check_built_in(job)) {
             	freeJob(job);
             }
             
