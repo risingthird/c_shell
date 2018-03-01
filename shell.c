@@ -233,7 +233,7 @@ int main(int argc, char** argv) {
 				if (strcmp(args_without_pipe[0], "exit") == 0) {
 					freeProcess(toAdd);
 					free(jobLine);
-					freeArgs(args_without_pipe);
+					//freeArgs(args_without_pipe);
 					freeJobList();
 					free(line);
 					freeArgs(command);
