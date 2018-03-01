@@ -411,6 +411,9 @@ void bBg(char** args, int argn) {
 		if (args[1][0] == '%' && atoi(args[1]+1) != 0) {
 			current_job = getJobJobId(atoi(args[1]+1));
 		}
+		else if (atoi(args[1]) != 0) {
+			current_job = getJobJobId(atoi(args[1]));
+		}
 		else {
 			printf("Pleas type in %%[number]\n");
 		}
