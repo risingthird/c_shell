@@ -1,8 +1,7 @@
 #include "ll.h"
 
-
-
-void jobInit() {
+void jobInit()
+{
 	head = malloc(sizeof(Node));
 	tail = malloc(sizeof(Node));
 	head->prev = NULL;
@@ -14,15 +13,17 @@ void jobInit() {
 	id = 1;
 }
 
-Job* createJob(char* line, Process* process, int status, int field) {
-	Job* toReturn = malloc(sizeof(Job));
+Job *createJob(char *line, Process *process, int status, int field)
+{
+	Job *toReturn = malloc(sizeof(Job));
 	toReturn->status = status;
 	toReturn->jobId = id;
 	toReturn->field = field;
 	id++;
-	if(line != NULL) {
-		toReturn->line  = malloc(sizeof(char) * strlen(line)+1);
-		bzero(toReturn->line, strlen(line)+1);
+	if (line != NULL)
+	{
+		toReturn->line = malloc(sizeof(char) * strlen(line) + 1);
+		bzero(toReturn->line, strlen(line) + 1);
 		strcpy(toReturn->line, line);
 	}
 	toReturn->processList = process;
@@ -31,63 +32,79 @@ Job* createJob(char* line, Process* process, int status, int field) {
 	return toReturn;
 }
 
-Job* getJobJobId(int job_id) {
-	Node* temp = head->next;
-	while(temp != NULL && temp->job != NULL) {
-		if(temp->job->jobId == job_id) {
+Job *getJobJobId(int job_id)
+{
+	Node *temp = head->next;
+	while (temp != NULL && temp->job != NULL)
+	{
+		if (temp->job->jobId == job_id)
+		{
 			return temp->job;
 		}
-		else {
+		else
+		{
 			temp = temp->next;
 		}
 	}
 	return NULL;
 }
 
-Job* getJobPid(pid_t pid) {
-	Node* temp = head->next;
-	while(temp != NULL && temp->job != NULL) {
-		if(temp->job->pgid == pid) {
+Job *getJobPid(pid_t pid)
+{
+	Node *temp = head->next;
+	while (temp != NULL && temp->job != NULL)
+	{
+		if (temp->job->pgid == pid)
+		{
 			return temp->job;
 		}
-		else {
+		else
+		{
 			temp = temp->next;
 		}
 	}
 	return NULL;
 }
 
-Job* getJobCommandName(char* command) {
-	Node* temp = head->next;
+Job *getJobCommandName(char *command)
+{
+	Node *temp = head->next;
 	int count = 0;
-	Job* toReturn;
-	while(temp != NULL && temp->job != NULL) {
-		if(strstr(temp->job->line, command) != NULL) {
+	Job *toReturn;
+	while (temp != NULL && temp->job != NULL)
+	{
+		if (strstr(temp->job->line, command) != NULL)
+		{
 			toReturn = temp->job;
 			count++;
 		}
-		else {
+		else
+		{
 			temp = temp->next;
 		}
 	}
 	return (count > 1 ? NULL : toReturn);
 }
 
-Job* getJLastSuspended() {
+Job *getJLastSuspended()
+{
 	return getJobJobId(last_suspended);
 }
 
-Job* getJLastBackgrounded() {
+Job *getJLastBackgrounded()
+{
 	return getJobJobId(last_backgrounded);
 }
 
-int jobInsert(Job* job) {
-	Node* toAdd = malloc(sizeof(Node));
-	if(!toAdd) {
+int jobInsert(Job *job)
+{
+	Node *toAdd = malloc(sizeof(Node));
+	if (!toAdd)
+	{
 		return FALSE;
 	}
 	toAdd->job = job;
-	Node* temp = tail->prev;
+	Node *temp = tail->prev;
 	temp->next = toAdd;
 	toAdd->prev = temp;
 	toAdd->next = tail;
@@ -95,18 +112,23 @@ int jobInsert(Job* job) {
 	return TRUE;
 }
 
-int jobRemovePid(pid_t pid) {
-	Node* temp = head->next;
-	while(temp != NULL && temp->job != NULL) {
-		if(temp->job->pgid == pid) {
-			Node* temp2 = temp->prev;
-			Node* temp3 = temp->next;
+int jobRemovePid(pid_t pid)
+{
+	Node *temp = head->next;
+	while (temp != NULL && temp->job != NULL)
+	{
+		if (temp->job->pgid == pid)
+		{
+			Node *temp2 = temp->prev;
+			Node *temp3 = temp->next;
 			temp2->next = temp3;
 			temp3->prev = temp2;
 			int i = temp->job->jobId;
 			// update all job id after the deleted one
-			while(temp2->job != NULL) {
-				if (temp2->job->jobId > i) {
+			while (temp2->job != NULL)
+			{
+				if (temp2->job->jobId > i)
+				{
 					temp2->job->jobId--;
 				}
 				temp2 = temp2->next;
@@ -118,25 +140,31 @@ int jobRemovePid(pid_t pid) {
 			temp = NULL;
 			return TRUE;
 		}
-		else {
+		else
+		{
 			temp = temp->next;
 		}
 	}
 	return FALSE;
 }
 
-int jobRemoveJobId(int job_id) {
-	Node* temp = head->next;
-	while(temp != NULL && temp->job != NULL) {
-		if(temp->job->jobId == job_id) {
-			Node* temp2 = temp->prev;
-			Node* temp3 = temp->next;
+int jobRemoveJobId(int job_id)
+{
+	Node *temp = head->next;
+	while (temp != NULL && temp->job != NULL)
+	{
+		if (temp->job->jobId == job_id)
+		{
+			Node *temp2 = temp->prev;
+			Node *temp3 = temp->next;
 			temp2->next = temp3;
 			temp3->prev = temp2;
 			int i = temp->job->jobId;
 			// update all job id after the deleted one
-			while(temp2->job != NULL) {
-				if (temp2->job->jobId > i) {
+			while (temp2->job != NULL)
+			{
+				if (temp2->job->jobId > i)
+				{
 					temp2->job->jobId--;
 				}
 				temp2 = temp2->next;
@@ -148,39 +176,49 @@ int jobRemoveJobId(int job_id) {
 			temp = NULL;
 			return TRUE;
 		}
-		else {
+		else
+		{
 			temp = temp->next;
 		}
 	}
 	return FALSE;
 }
 
-void jobSetPGid(Job* job, pid_t pgid) {
+void jobSetPGid(Job *job, pid_t pgid)
+{
 	job->pgid = pgid;
 	return;
 }
 
-void jobChangeStatus(Job* job, int status) {
+void jobChangeStatus(Job *job, int status)
+{
 	job->status = status;
 	return;
 }
 
-void printList() {
-	Node* temp = head->next;
-	while(temp != NULL && temp->job != NULL) {
-		if (temp->job->status == JOBCOMP) {
+void printList()
+{
+	Node *temp = head->next;
+	while (temp != NULL && temp->job != NULL)
+	{
+		if (temp->job->status == JOBCOMP)
+		{
 			printf("[%d] Done                     %s\n", temp->job->jobId, temp->job->line);
 		}
-		else if(temp->job->status ==  JOBSTOP) {
+		else if (temp->job->status == JOBSTOP)
+		{
 			printf("[%d] Stopped                     %s\n", temp->job->jobId, temp->job->line);
 		}
-		else if(temp->job->status ==  JOBRUN) {
-			printf("[%d] Run                     %s\n", temp->job->jobId,  temp->job->line);
+		else if (temp->job->status == JOBRUN)
+		{
+			printf("[%d] Run                     %s\n", temp->job->jobId, temp->job->line);
 		}
-		else if (temp->job->status ==  JOBTERM) {
+		else if (temp->job->status == JOBTERM)
+		{
 			printf("[%d] Forcefully Terminated                     %s\n", temp->job->jobId, temp->job->line);
 		}
-		else {
+		else
+		{
 			perror("Print status error!\n");
 			exit(EXIT_FAILURE);
 		}
@@ -188,24 +226,28 @@ void printList() {
 	}
 }
 
-void printJobStatus(Job* job) {
-	if(job->status == JOBCOMP)
+void printJobStatus(Job *job)
+{
+	if (job->status == JOBCOMP)
 		printf("\n[%d] Done                     %s\n", job->jobId, job->line);
-	else if(job->status == JOBSTOP)
+	else if (job->status == JOBSTOP)
 		printf("\n[%d] Stopped                     %s\n", job->jobId, job->line);
-	else if(job->status == JOBRUN)
+	else if (job->status == JOBRUN)
 		printf("\n[%d] Run                     %s\n", job->jobId, job->line);
-	else if(job->status == JOBTERM)
+	else if (job->status == JOBTERM)
 		printf("\n[%d] Forcefully terminated                     %s\n", job->jobId, job->line);
-	else {
+	else
+	{
 		perror("Print status error!\n");
 		exit(EXIT_FAILURE);
 	}
 }
 
-void freeArgs(char** args) {
+void freeArgs(char **args)
+{
 	int count = 0;
-	while(args != NULL && args[count] != NULL) {
+	while (args != NULL && args[count] != NULL)
+	{
 		free(args[count]);
 		args[count] = NULL;
 		count++;
@@ -215,9 +257,11 @@ void freeArgs(char** args) {
 	args = NULL;
 }
 
-void freeProcess(Process* process) {
-	Process* temp;
-	while(process != NULL) {	
+void freeProcess(Process *process)
+{
+	Process *temp;
+	while (process != NULL)
+	{
 		temp = process;
 		process = process->next;
 		freeArgs(temp->args);
@@ -227,24 +271,30 @@ void freeProcess(Process* process) {
 	}
 }
 
-void freeJob(Job* job) {
-	if (job != NULL && job->processList != NULL) {
+void freeJob(Job *job)
+{
+	if (job != NULL && job->processList != NULL)
+	{
 		freeProcess(job->processList);
 		job->processList = NULL;
 	}
-	if (job != NULL && job->line != NULL) {
+	if (job != NULL && job->line != NULL)
+	{
 		free(job->line);
 		job->line = NULL;
 	}
-	if (job != NULL) {
+	if (job != NULL)
+	{
 		free(job);
 		job = NULL;
 	}
 }
 
-void freeJobList() {
-	while(head->next->job != NULL) {
-		Node* temp = head->next;
+void freeJobList()
+{
+	while (head->next->job != NULL)
+	{
+		Node *temp = head->next;
 		head->next = temp->next;
 		freeJob(temp->job);
 		temp->job = NULL;
