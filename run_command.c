@@ -101,8 +101,8 @@ void bKill(char** args, int argn) {
 				}
 			}
 		}
-      }     
-    }
+    }     
+    
     //if the element is % or other symbol--ignore
     else {
       continue;
