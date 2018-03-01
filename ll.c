@@ -216,8 +216,9 @@ void freeArgs(char** args) {
 }
 
 void freeProcess(Process* process) {
-	Process* temp = process;
+	Process* temp;
 	while(process != NULL) {		
+		temp = process;
 		process = process->next;
 		freeArgs(temp->args);
 		temp->args = NULL;
