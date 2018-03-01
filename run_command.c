@@ -253,6 +253,7 @@ void bFg(char** args, int argn, sigset_t child_mask) {
         }
         else {
                 printf("Pleas type in %%[number]\n" );
+        }
 
 	//update job status
 	//first check whether the job used to be stopped
@@ -429,9 +430,8 @@ void bBg(char** args, int argn) {
 	pid_t current_pgid = -1 * current_job->pgid;
 	if(kill(current_pgid, SIGCONT) < 0)
 		perror("kill (SIGCONT)");
-
-
 }
+
 int check_built_in(Job* job) {
 	if (job->processList == NULL) {
 		return FALSE;
