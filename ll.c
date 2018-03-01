@@ -141,7 +141,9 @@ int jobRemoveJobId(int job_id) {
 			}
 			id--;
 			freeJob(temp->job);
+			temp->job = NULL;
 			free(temp);
+			temp = NULL;
 			return TRUE;
 		}
 		else {
