@@ -256,13 +256,15 @@ int main(int argc, char** argv) {
             if (check_built_in(job)) {
             	id--;
             }
-	    if (strcmp(job->processList->args[0], "exit") == 0) {
-		//free(jobLine);
-		//freeArgs(args_without_pipe);
-		freeJobList();
-		//freeArgs(command);
-		return 0;
-	    }
+
+		    if (strcmp(job->processList->args[0], "exit") == 0) {
+				//free(jobLine);
+				freeArgs(args_without_pipe);
+				freeJobList();
+				freeArgs(command);
+				return 0;
+		    }
+
             executing_command_without_pipe(job, child_mask);
             
             if (getJobPid(check_stat_pid) != NULL && check_built_in(job)) {
