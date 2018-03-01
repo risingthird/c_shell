@@ -331,8 +331,10 @@ void bFg(char **args, int argn, sigset_t child_mask)
 	current_job->field = JOBFORE; //-- How do I know it is from stopped job or newly created job? how to keep track
 	current_job->status = JOBRUN;
 	pid_t current_pgid = -1 * current_job->pgid;
-	if (kill(current_pgid, SIGCONT) < 0)
+	if (kill(current_pgid, SIGCONT) < 0) {
 		perror("kill (SIGCONT)"); // send sigcont to all processes of that process group
+		return;
+	}
 	//we can directly send a signal to a process group
 
 	//should add a flag to determine whether job used to be stopped
