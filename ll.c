@@ -125,13 +125,13 @@ int jobRemovePid(pid_t pid)
 			temp3->prev = temp2;
 			int i = temp->job->jobId;
 			// update all job id after the deleted one
-			while (temp2->job != NULL)
+			while (temp3!= NULL && temp3->job != NULL)
 			{
-				if (temp2->job->jobId > i)
+				if (temp3->job->jobId > i)
 				{
-					temp2->job->jobId--;
+					temp3->job->jobId--;
 				}
-				temp2 = temp2->next;
+				temp3 = temp3->next;
 			}
 			id--;
 			freeJob(temp->job);
@@ -161,13 +161,13 @@ int jobRemoveJobId(int job_id)
 			temp3->prev = temp2;
 			int i = temp->job->jobId;
 			// update all job id after the deleted one
-			while (temp2->job != NULL)
+			while (temp3 != NULL && temp3->job != NULL)
 			{
-				if (temp2->job->jobId > i)
+				if (temp3->job->jobId > i)
 				{
-					temp2->job->jobId--;
+					temp3->job->jobId--;
 				}
-				temp2 = temp2->next;
+				temp3 = temp3->next;
 			}
 			id--;
 			freeJob(temp->job);
