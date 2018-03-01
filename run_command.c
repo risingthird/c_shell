@@ -94,9 +94,9 @@ void bKill(char** args, int argn) {
       //wait until the sigkill sent                                                                                                                             
       waitpid(job->pgid, &status, 0);
     }
-    else if (i > 0) {
-    	waitpid(job->pgid, &status, 0);
-    }
+    // else if (i > 0) {
+    // 	waitpid(job->pgid, &status, 0);
+    // }
   }
 }
 // void bKill(char** args, int argn) {
