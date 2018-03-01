@@ -232,25 +232,27 @@ void bFg(char** args, int argn, sigset_t child_mask) {
 	if (argn == 1) {
 		current_job = getJLastBackgrounded();
 	}
-	else {
-		for(int i = 1; i < argn; i++) {
-			if(i >= 2) {
-				break; // fg only supports for one argument, so we break here
-			}
-			if (args[i][0] == '%' && atoi(args[i]+1) != 0) {
-				current_job = getJobJobId(atoi(args[i]+1));
-			}
-			//if called by command name
-			else if(atoi(args[i]) == 0){
-				//d
-				current_job = getJobCommandName(args[i]);
-			}
-			else {
-				current_job = getJobJobId(atoi(args[i]));
-			}
-
-		}
-	}
+        else if (argn == 2){
+                if (args[1][0] == '%' && atoi(args[1]+1) != 0) {
+                        current_job = getJobJobId(atoi(args[1]+1));
+                }
+                else if (atoi(args[1]) != 0) {
+                        current_job = getJobJobId(atoi(args[1]));
+                }
+                else {
+                        printf("Pleas type in %%[number]\n");
+                }
+        }
+        else if(argn == 3) {
+                if ((strcmp(args[1],"%") == 0) && atoi(args[2]) != 0) {
+                        current_job = getJobJobId(atoi(args[2]));
+                }
+                else {
+                        printf("Pleas type in %%[number]\n");
+                }
+        }
+        else {
+                printf("Pleas type in %%[number]\n" );
 
 	//update job status
 	//first check whether the job used to be stopped
@@ -258,7 +260,7 @@ void bFg(char** args, int argn, sigset_t child_mask) {
 		printf("fg: No such job exist!\n");
 		return;
 	}
-	if(current_job->field == JOBSTOP)
+	if(current_job->status == JOBSTOP)
 		is_suspended = 1;
 	current_job->field = JOBFORE; //-- How do I know it is from stopped job or newly created job? how to keep track
 	current_job->status = JOBRUN;
