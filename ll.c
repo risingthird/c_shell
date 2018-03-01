@@ -224,7 +224,7 @@ void freeProcess(Process* process) {
 void freeJob(Job* job) {
 	if (job != NULL && job->processList != NULL) {
 		freeProcess(job->processList);
-		free
+		
 	}
 	if (job != NULL && job->line != NULL) {
 		free(job->line);
