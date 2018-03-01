@@ -23,6 +23,7 @@ enum {PROCCOMP, PROCSTOP, PROCRUN}; // PROCCOMP 0, PROCSTOP 1, PROCRUN 2
 int myShTerminal;
 pid_t myShPGid;
 struct termios myShTmodes;
+pid_t check_stat_pid;
 
 /*
 #define TRUE 1
