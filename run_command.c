@@ -33,31 +33,36 @@ void bKill(char** args, int argn) {
     if(args[i][0] == '-'){
       dash_flag ++;
       if(strcmp(args[i], "-9") == 0) {
-	kill_flag = TRUE; //probably we need to test whether kill_flag is false
+		if (i != 1) {
+			printf("kill: usage: kill (signal) %%jid (or pid).Currently, signal only support -9, SIGKILL.\n");
+			return;
+		}
+		kill_flag = TRUE; //probably we need to test whether kill_flag is false
       }
       else {
-	printf("kill: usage: kill (signal) %%jid (or pid).Currently, signal only support -9, SIGKILL.\n");
-	return;
+		printf("kill: usage: kill (signal) %%jid (or pid).Currently, signal only support -9, SIGKILL.\n");
+		return;
       }
     }
     else if(atoi(args[i]) != 0) {
-      job = getJobPid(atoi(args[i]));
-      if(job == NULL) {
-	job = getJobJobId(atoi(args[i]));
-      }
-      if(job == NULL) {
-	printf("invalid job number or process number\n");
-	return;
-      }
-      to_be_killed = (-1) * job->pgid;
-      if(kill_flag) {
-	if(kill(to_be_killed,SIGKILL) == -1)
-	  perror("Kill failed\n");
-      }
+    	job = getJobPid(atoi(args[i]));
+      	if(job == NULL) {
+			job = getJobJobId(atoi(args[i]));
+      	}
+      	if(job == NULL) {
+			printf("invalid job number or process number\n");
+			return;
+     	}
+      	to_be_killed = (-1) * job->pgid;
+      	if(kill_flag) {
+			if(kill(to_be_killed,SIGKILL) == -1) {
+	  			perror("Kill failed\n");
+			}
+      	}	
       else {
-	if(kill(to_be_killed,SIGTERM) == -1) {
-	  perror("Kill failed\n");
-	}
+		if(kill(to_be_killed,SIGTERM) == -1) {
+	  		perror("Kill failed\n");
+		}
       }
     }
     //if the element is %number
