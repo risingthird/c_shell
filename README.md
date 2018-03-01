@@ -7,7 +7,7 @@ How to compile:
 	I have written a Makefile, the default "make" command will let you compile the mysh program. I also have a "make clean" command to delete all files except the necessary .h .c files.
 
 How to run it:
-	 For running mysh program, only one default option: "./mysh", and if you see the prompt: "[用心写bug，用脚写shell, only bugs live forever ┻━┻ ︵ヽ(`Д´)ﾉ︵﻿ ┻━┻, ¯\\_(ツ)_/¯ whatevs Broken Shell]" you are in my shell now.
+	 For running mysh program, only one default option: "./mysh", and if you see the prompt: "[用心写bug，用脚写shell, (ヘ･_･)ヘ┳━┳ ┫ ┻━┻ ︵ヽ(`Д´)ﾉ︵ ┻━┻ ┣ﾍ(^▽^ﾍ)Ξ(ﾟ▽ﾟ*)ﾉ┳━┳, ¯\\_(ツ)_/¯ TZJ Shell]" you are in my shell now.
 
 Feature list with known bugs and limitations:
 	1. The limitation of fg is that user can only input "fg" with less than or equal to one '%'. For exmaple, "fg %1 %2" is not a valid command and we will print an error message. However, we support white space between '%' and the job number. If there is no '%', we will first assume it is also a job and search. Also, we don't support bring more than one job back to foreground. That is to say "fg 1 2 3" is invalid. We will also report this error to user.
