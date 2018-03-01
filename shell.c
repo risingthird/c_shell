@@ -146,6 +146,7 @@ int main(int argc, char** argv) {
 	jobInit();
 	initShell();
 	int status = 0;
+	int built_in_flag = FALSE;
 	check_stat_pid = -10;
 	/* Sigchild signal handling*/
 	//declare the sample sigaction struct
@@ -270,17 +271,17 @@ int main(int argc, char** argv) {
             }
 	    if(check_built_in(job)) {
             	id--;
-            	}
+		built_in_flag = TRUE;
+            }
 	    
 
 		    
 
             executing_command_without_pipe(job, child_mask);
             
-            if (getJobPid(check_stat_pid) != NULL) {
-		    if (check_built_in(job)) {
+            if (built_in_flag) {
             	freeJob(job);
-            	}
+		built_in_flag = FALSE;
 	    }
             
             Node* temp = head->next;
