@@ -275,7 +275,7 @@ int main(int argc, char** argv) {
             }
 		}
 	free(line);
-
+	freeArgs(command);
 	}
 	return 0;
 

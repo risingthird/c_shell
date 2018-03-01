@@ -24,6 +24,7 @@ Job* createJob(char* line, Process* process, int status, int field) {
 		toReturn->line  = malloc(sizeof(char) * strlen(line)+1);
 		bzero(toReturn->line, strlen(line)+1);
 		strcpy(toReturn->line, line);
+		free(toReturn->line);
 	}
 	toReturn->processList = process;
 	toReturn->pgid = 0;
