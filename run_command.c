@@ -201,8 +201,7 @@ void put_job_in_foreground(Job* job, sigset_t child_mask, int flag_stop) {
 		jobRemoveJobId(job->jobId);
 		jobs_unlock(child_mask);
 	}
-
-	if(job->status == JOBSTOP) {
+	else(job->status == JOBSTOP) {
 		//if job has been suspended, we store its termios
 		tcgetattr(myShTerminal, &job->j_Tmodes);
 	}
