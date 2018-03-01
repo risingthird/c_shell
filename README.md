@@ -23,3 +23,6 @@ file directory:
 				https://github.com/stpddream/OSHomework/tree/master/hw3
 				http://blog.csdn.net/lin535061851/article/details/48395607
 				Ziting Shen, Linyi Chen, Xuan Huang and Elieen Feng.
+
+Extra feature：
+	our shell supports two extra features: 1) tab completion and 2) change directory. 
