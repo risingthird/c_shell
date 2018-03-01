@@ -205,8 +205,9 @@ void freeArgs(char** args) {
 		free(args[count]);
 		count++;
 	}
-	args = NULL;
+	//args = NULL;
 	free(args);
+	args = NULL;
 }
 
 void freeProcess(Process* process) {
