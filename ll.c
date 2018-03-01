@@ -219,9 +219,15 @@ void freeProcess(Process* process) {
 }
 
 void freeJob(Job* job) {
-	freeProcess(job->processList);
-	free(job->line);
-	free(job);
+	if (job != NULL && job->processList != NULL) {
+		freeProcess(job->processList);
+	}
+	if (job != NULL && job->line != NULL) {
+		free(job->line);
+	}
+	if (job != NULL) {
+		free(job);
+	}
 }
 
 void freeJobList() {
