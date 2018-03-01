@@ -311,7 +311,7 @@ int main(int argc, char **argv)
 			while (temp != NULL && temp->job != NULL)
 			{
 				Node *next = temp->next;
-				if (temp->job->field == JOBBACK)
+				if (temp->job->field == JOBBACK || temp->job->field == JOBFORE)
 				{
 					if (temp->job->status == JOBCOMP || temp->job->status == JOBTERM)
 					{
