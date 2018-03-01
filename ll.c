@@ -216,21 +216,24 @@ void freeProcess(Process* process) {
 		Process* temp = process;
 		process = process->next;
 		freeArgs(temp->args);
-		free(temp->args);
+		temp->args = NULL;
 		free(temp);
+		temp = NULL;
 	}
 }
 
 void freeJob(Job* job) {
 	if (job != NULL && job->processList != NULL) {
 		freeProcess(job->processList);
-		
+		job->processList = NULL;
 	}
 	if (job != NULL && job->line != NULL) {
 		free(job->line);
+		job->line = NULL;
 	}
 	if (job != NULL) {
 		free(job);
+		job = NULL;
 	}
 }
 
