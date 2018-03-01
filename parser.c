@@ -54,10 +54,10 @@ int parseCommands(char* line, char** command) {
 	char* split;
 
 	if((split = strtok(line, ";")) == NULL) {
-		count = 1;
-		command[count-1] = malloc(strlen(line)+1);
-		bzero(command[count-1], strlen(line)+1);
-		strcpy(command[count-1], line);
+		// count = 1;
+		// command[count-1] = malloc(strlen(line)+1);
+		// bzero(command[count-1], strlen(line)+1);
+		// strcpy(command[count-1], line);
 		return count;
 	}
 	int len;
