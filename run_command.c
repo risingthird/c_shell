@@ -431,6 +431,9 @@ void bBg(char** args, int argn) {
 
 }
 int check_built_in(Job* job) {
+	if (job->processList == NULL) {
+		return FALSE;
+	}
 	char** args = job->processList->args;
 	int argn = job->processList->argn;
 	if(args == NULL) {
