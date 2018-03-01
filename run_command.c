@@ -453,9 +453,9 @@ int check_built_in(Job* job) {
 	else if (strcmp(args[0],"bg") == 0) {
 		return TRUE;
 	}
-	else if (strcmp(args[0],"exit") == 0) {
+	/*else if (strcmp(args[0],"exit") == 0) {
 		return TRUE;
-	}
+	}*/
 	else if (strcmp(args[0],"jobs") == 0) {
 		return TRUE;
 	}
