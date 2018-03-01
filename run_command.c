@@ -67,23 +67,23 @@ void bKill(char** args, int argn) {
     }
     //if the element is %number
     else if(args[i][0] == '%' && atoi(args[i]+1) != 0) {
-      job = getJobPid(atoi(args[i]+1));
-      if(job == NULL) {
-	job = getJobJobId(atoi(args[i]+1));
-      }
-      if(job == NULL) {
-	printf("invalid job number or process number\n");
+      	job = getJobPid(atoi(args[i]+1));
+      	if(job == NULL) {
+			job = getJobJobId(atoi(args[i]+1));
+      	}
+      	if(job == NULL) {
+			printf("invalid job number or process number\n");
 		    return;
-      }
-      to_be_killed = (-1) * job->pgid;
-      if(kill_flag) {
-	if(kill(to_be_killed,SIGKILL) == -1)
-	  perror("Kill failed\n");
-      }
-      else {
-	if(kill(to_be_killed,SIGTERM) == -1) {
-	  perror("Kill failed\n");
-	}
+      	}
+      	to_be_killed = (-1) * job->pgid;
+      	if(kill_flag) {
+			if(kill(to_be_killed,SIGKILL) == -1)
+	  			perror("Kill failed\n");
+      	}
+      	else {
+			if(kill(to_be_killed,SIGTERM) == -1) {
+	 			perror("Kill failed\n");
+		}
       }     
     }
     //if the element is % or other symbol--ignore
