@@ -113,6 +113,9 @@ int jobRemovePid(pid_t pid) {
 			}
 			id--;
 			freeJob(temp->job);
+			if (temp->job != NULL) {
+				free(temp->job);
+			}
 			temp->job = NULL;
 			free(temp);
 			temp = NULL;
@@ -143,6 +146,9 @@ int jobRemoveJobId(int job_id) {
 			}
 			id--;
 			freeJob(temp->job);
+			if (temp->job != NULL) {
+				free(temp->job);
+			}
 			temp->job = NULL;
 			free(temp);
 			temp = NULL;
@@ -236,10 +242,10 @@ void freeJob(Job* job) {
 		free(job->line);
 		job->line = NULL;
 	}
-	if (job != NULL) {
-		free(job);
-		job = NULL;
-	}
+	// if (job != NULL) {
+	// 	free(job);
+	// 	job = NULL;
+	// }
 }
 
 void freeJobList() {
@@ -247,6 +253,9 @@ void freeJobList() {
 		Node* temp = head->next;
 		head->next = temp->next;
 		freeJob(temp->job);
+		if (temp->job != NULL) {
+			free(temp->job);
+		}
 		temp->job = NULL;
 		free(temp);
 		temp = NULL;
