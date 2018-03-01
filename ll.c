@@ -218,6 +218,7 @@ void freeProcess(Process* process) {
 		Process* temp = process;
 		process = process->next;
 		freeArgs(temp->args);
+		free(temp->args);
 		temp->args = NULL;
 		free(temp);
 		temp = NULL;
