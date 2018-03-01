@@ -89,8 +89,17 @@ void bKill(char** args, int argn) {
 	  			perror("Kill failed\n");
       	}
       	else {
-			if(kill(to_be_killed,SIGTERM) == -1) {
-	 			perror("Kill failed\n");
+			if (job->status = JOBSTOP) {
+				kill(to_be_killed,SIGCONT);
+				if(kill(to_be_killed,SIGTERM) == -1) {
+	  				perror("Kill failed\n");
+				}
+			}
+			else {
+				if(kill(to_be_killed,SIGTERM) == -1) {
+	  				perror("Kill failed\n");
+				}
+			}
 		}
       }     
     }
