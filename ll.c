@@ -203,6 +203,7 @@ void freeArgs(char** args) {
 	int count = 0;
 	while(args != NULL && args[count] != NULL) {
 		free(args[count]);
+		args[count] = NULL;
 		count++;
 	}
 	//args = NULL;
