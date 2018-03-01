@@ -274,7 +274,7 @@ int main(int argc, char** argv) {
             	temp = temp->next;
             }
 		}
-
+	free(line);
 
 	}
 	return 0;
