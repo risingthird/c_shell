@@ -76,7 +76,7 @@ int parseCommands(char* line, char** command) {
 				*command = realloc(*command, num_process * sizeof(char*));
 		}*/
 	}
-
+	command[count] = NULL;
 	for (int j = 0; j < count - 1; ++j) {
 		if (check_last_character_in_process(command[j])) {
 			return -1;
