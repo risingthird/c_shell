@@ -55,8 +55,8 @@ int check_last_character_in_process(char *process_line)
 int parseCommands(char *line, char **command)
 {
 	int count = 0;
-	int i = 0;
-	int num_process = DEFAULT_NUM_PROCESS;
+	//int i = 0;
+	//int num_process = DEFAULT_NUM_PROCESS;
 	char *split;
 
 	if ((split = strtok(line, ";")) == NULL)
@@ -99,8 +99,8 @@ int parseCommands(char *line, char **command)
 int parseSegments(char *command, char **segments)
 {
 	int count = 0;
-	int i = 0;
-	int num_segments = DEFAULT_NUM_SEGMENTS;
+	//int i = 0;
+	//int num_segments = DEFAULT_NUM_SEGMENTS;
 	char *split;
 
 	if ((split = strtok(command, "|")) == NULL)
@@ -135,9 +135,9 @@ int parseSegments(char *command, char **segments)
 int parseArguments(char *segments, char **arguments)
 {
 	int count = 0;
-	int i = 0;
+	//int i = 0;
 	int foreground = 1; //  will change to -1 if it's in background
-	int num_arguments = DEFAULT_NUM_ARG;
+	//int num_arguments = DEFAULT_NUM_ARG;
 	char *split;
 
 	if ((split = strtok(segments, " \n\t")) == NULL)

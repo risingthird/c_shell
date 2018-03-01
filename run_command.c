@@ -73,7 +73,7 @@ void bKill(char **args, int argn)
 			}
 			else
 			{
-				if (job->status = JOBSTOP)
+				if (job->status == JOBSTOP)
 				{
 					kill(to_be_killed, SIGCONT);
 					if (kill(to_be_killed, SIGTERM) == -1)
@@ -111,7 +111,7 @@ void bKill(char **args, int argn)
 			}
 			else
 			{
-				if (job->status = JOBSTOP)
+				if (job->status == JOBSTOP)
 				{
 					kill(to_be_killed, SIGCONT);
 					if (kill(to_be_killed, SIGTERM) == -1)
@@ -271,7 +271,7 @@ void put_job_in_foreground(Job *job, sigset_t child_mask, int flag_stop)
 
 void bFg(char **args, int argn, sigset_t child_mask)
 {
-	int jid; // get job id by args or use default setting
+	//int jid; // get job id by args or use default setting
 	Job *current_job = NULL;
 	int is_suspended = 0;
 	/*if(argn == 1)
@@ -511,7 +511,7 @@ int check_built_in(Job *job)
 		return FALSE;
 	}
 	char **args = job->processList->args;
-	int argn = job->processList->argn;
+	//int argn = job->processList->argn;
 	if (args == NULL)
 	{
 		return FALSE;

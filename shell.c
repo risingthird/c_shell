@@ -155,7 +155,7 @@ int main(int argc, char **argv)
 	//initShell();
 	jobInit();
 	initShell();
-	int status = 0;
+	//int status = 0;
 	int built_in_flag = FALSE;
 	check_stat_pid = -10;
 	/* Sigchild signal handling*/
@@ -170,7 +170,7 @@ int main(int argc, char **argv)
 	//register the signal SIGCHLD.
 	sigaction(SIGCHLD, &sa, NULL);
 
-	sigset_t block_mask;
+	//sigset_t block_mask;
 	//sigaddset(&block_mask, SIGINT);
 
 	//ignore most signals in parent shell
@@ -198,7 +198,7 @@ int main(int argc, char **argv)
 	//signal(SIGINT, SIG_IGN);
 	int numCommands;
 	int numArguments;
-	int numSegments;
+	//int numSegments;
 	while (1)
 	{
 		// print our shell prompt
