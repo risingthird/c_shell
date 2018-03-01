@@ -219,7 +219,7 @@ void bKill(char **args, int argn)
 
 void put_job_in_foreground(Job *job, sigset_t child_mask, int flag_stop)
 {
-	pid_t pid;
+  //pid_t pid;
 	int status;
 	//put the job into foreground;
 	//shell_terminal is a global file descriptor represented as shell
@@ -237,7 +237,7 @@ void put_job_in_foreground(Job *job, sigset_t child_mask, int flag_stop)
 	while (job->status != JOBCOMP && job->status != JOBSTOP && job->status != JOBTERM)
 	{
 		//pid = waitpid(WAIT_ANY, &status, WUNTRACED | WNOHANG);
-		pid = waitpid(job->pgid, &status, WUNTRACED); // since it's in foreground, we shouldn't use WNOHANG
+		waitpid(job->pgid, &status, WUNTRACED); // since it's in foreground, we shouldn't use WNOHANG
 													  //printf("foreground job returned, pid is %d\n", pid);
 
 		// 		if(WIFSTOPPED(status))

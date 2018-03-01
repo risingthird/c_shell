@@ -98,19 +98,19 @@ void ourPrompt()
 	char *username = pwd->pw_name;	 // username
 	char *homedirectory = pwd->pw_dir; // home directory
 	// a little bit verbose, restore when all bug fixed
-	// if (gethostname(host, MAXLEN) == 0) {
-	//   printf("[用心写bug，用脚写shell, only bugs live forever ┻━┻ ︵ヽ(`Д´)ﾉ︵﻿ ┻━┻, ¯\\_(ツ)_/¯ whatevs Broken Shell]\n[%s@%s ", username, host);
-	// } else
-	//   printf("[用心写bug，用脚写shell, only bugs live forever ┻━┻ ︵ヽ(`Д´)ﾉ︵﻿ ┻━┻, ¯\\_(ツ)_/¯ whatevs Broken Shell]\n[%s@unknown ", username);
+	 if (gethostname(host, MAXLEN) == 0) {
+	   printf("[用心写bug，用脚写shell, only bugs live forever ┻━┻ ︵ヽ(`Д´)ﾉ︵﻿ ┻━┻, ¯\\_(ツ)_/¯ whatevs Broken Shell]\n[%s@%s ", username, host);
+	 } else
+	   printf("[用心写bug，用脚写shell, only bugs live forever ┻━┻ ︵ヽ(`Д´)ﾉ︵﻿ ┻━┻, ¯\\_(ツ)_/¯ whatevs Broken Shell]\n[%s@unknown ", username);
 
-	if (gethostname(host, MAXLEN) == 0)
+	/*if (gethostname(host, MAXLEN) == 0)
 	{
 		printf(">>>>>>>>>>>>[%s@%s ", username, host);
 	}
 	else
 	{
 		printf(">>>>>>>>>>>>[%s@unknown ", username);
-	}
+	}*/
 
 	if (strlen(path) < strlen(homedirectory) || strncmp(path, homedirectory, strlen(homedirectory)))
 		printf("%s]", path);
