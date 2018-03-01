@@ -146,6 +146,7 @@ int main(int argc, char** argv) {
 	jobInit();
 	initShell();
 	int status = 0;
+	check_stat_pid = -10;
 	/* Sigchild signal handling*/
 	//declare the sample sigaction struct
 	struct sigaction sa;
@@ -267,20 +268,24 @@ int main(int argc, char** argv) {
             	printf("Add job fail!\n");
             	exit(1);
             }
-            if (check_built_in(job)) {
+	    if(check_built_in(job)) {
             	id--;
-            }
+            	}
+	    
 
 		    
 
             executing_command_without_pipe(job, child_mask);
             
-            if (job != NULL && check_built_in(job)) {
+            if (getJobPid(check_stat_pid) != NULL) {
+		    if (check_built_in(job)) {
             	freeJob(job);
-            }
+            	}
+	    }
             
             Node* temp = head->next;
             while(temp != NULL && temp->job != NULL) {
+		    Node* next = temp->next;
             	if (temp->job->field == JOBBACK) {
             		if (temp->job->status == JOBCOMP || temp->job->status == JOBTERM) {
             			jobs_lock(child_mask);
@@ -288,7 +293,7 @@ int main(int argc, char** argv) {
 						jobs_unlock(child_mask);
             		}
             	}
-            	temp = temp->next;
+            	temp = next;
             }
 		}
 	free(line);

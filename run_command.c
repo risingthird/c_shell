@@ -526,10 +526,11 @@ void executing_command_without_pipe(Job *job, sigset_t child_mask) {
 			// parent process
 			setpgid(pid, 0); // set the pgid of the child process
 			check_stat_pid = pid;
+			//printf("check_stat_pid %d", check_stat_pid);
 			tcsetpgrp(myShTerminal, pid); //bring child to foreground, modified Tue 7:25 pm
 			job->pgid = pid;
 			waitpid(pid, &status, WUNTRACED);
-			printf("Test!\n");
+			//printf("Test!\n");
 			// if the signal is termination (WIFSIGNALED) or normal exit, remove the job and free the memory.
 			if (WIFSIGNALED(status) || WIFEXITED(status)) {
 				jobs_lock(child_mask);
@@ -584,6 +585,7 @@ void executing_command_without_pipe(Job *job, sigset_t child_mask) {
 			setpgid(pid, 0); // set the pgid of the child process
 			check_stat_pid = pid;
 			job->pgid = pid;
+			//printf("check_stat_pid %d", check_stat_pid);
 			sigprocmask(SIG_UNBLOCK, &child, NULL);
 			// waitpid(pid, &status, WNOHANG);
 			// // if the signal is termination (WIFSIGNALED) or normal exit, remove the job and free the memory.
