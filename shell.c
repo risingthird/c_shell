@@ -240,7 +240,7 @@ int main(int argc, char** argv) {
 			else {
 				free(jobLine);
 				freeArgs(args_without_pipe);
-				free(command);
+				freeArgs(command);
 				break;
 			}
 			status = JOBRUN;
@@ -275,7 +275,7 @@ int main(int argc, char** argv) {
             }
 		}
 	free(line);
-	freeArgs(command);
+	//freeArgs(command);
 	}
 	return 0;
 
