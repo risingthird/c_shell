@@ -242,7 +242,9 @@ void freeJobList() {
 		Node* temp = head->next;
 		head->next = temp->next;
 		freeJob(temp->job);
+		temp->job = NULL;
 		free(temp);
+		temp = NULL;
 	}
 	free(head);
 	free(tail);
