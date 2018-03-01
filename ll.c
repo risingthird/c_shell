@@ -21,7 +21,8 @@ Job* createJob(char* line, Process* process, int status, int field) {
 	toReturn->field = field;
 	id++;
 	if(line != NULL) {
-		toReturn->line  = malloc(sizeof(char) * strlen(line));
+		toReturn->line  = malloc(sizeof(char) * strlen(line)+1);
+		bzero(toReturn->line, strlen(line)+1);
 		strcpy(toReturn->line, line);
 	}
 	toReturn->processList = process;

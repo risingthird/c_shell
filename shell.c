@@ -205,7 +205,8 @@ int main(int argc, char** argv) {
 		
 
 		for(int i = 0; i < numCommands; i++){
-			jobLine = (char*) malloc(sizeof(char) * strlen(command[i]));
+			jobLine = (char*) malloc(sizeof(char) * strlen(command[i])+1);
+			bzero(jobLine, strlen(command[i]) + 1);
 			args_without_pipe = (char**) malloc(sizeof(char*) * MAXLEN);
 			strcpy(jobLine, command[i]);
 			bzero(args_without_pipe, MAXLEN);
