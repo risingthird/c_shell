@@ -522,6 +522,10 @@ int check_built_in(Job *job)
 	{
 		return FALSE;
 	}
+	else if (strcmp(args[0], "cd") == 0)
+	{
+	        return TRUE;
+	}
 	else if (strcmp(args[0], "kill") == 0)
 	{
 		return TRUE;
@@ -550,6 +554,10 @@ int exeBuiltIn(char **args, int argn, sigset_t child_mask)
 	if (strcmp(args[0], "kill") == 0)
 	{
 		bKill(args, argn);
+	}
+	else if (strcmp(args[0], "cd") == 0)
+	{
+	        return TRUE;
 	}
 	else if (strcmp(args[0], "fg") == 0)
 	{

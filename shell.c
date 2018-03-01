@@ -262,7 +262,27 @@ int main(int argc, char **argv)
 					return 0;
 				}
 			}
-
+                        if (args_without_pipe != NULL && args_without_pipe[0] != NULL)
+                        {
+                                int ret;
+                                if (strcmp(args_without_pipe[0], "cd") == 0 && args_without_pipe[1] == NULL)
+                                {
+                                        const char* home = getenv("HOME");
+                                        ret = chdir(home);
+                                        if (ret == -1)
+                                                perror("cd");
+                                        //free(jobLine);
+                                        //freeProcess(toAdd);
+                                }
+                                else if (strcmp(args_without_pipe[0], "cd") == 0 && args_without_pipe[1] != NULL)
+                                {
+                                        ret = chdir(args_without_pipe[1]);
+                                        if (ret == -1)
+                                                perror("cd");
+                                       //free(jobLine);
+                                       //freeProcess(toAdd);
+                                }       
+                        }
 			int field;
 			int status;
 			if (numArguments < 0)
