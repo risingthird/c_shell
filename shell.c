@@ -252,7 +252,7 @@ int main(int argc, char** argv) {
 			}
 			else {
 				free(jobLine);
-				freeArgs(args_without_pipe);
+				//freeArgs(args_without_pipe);
 				freeProcess(toAdd);
 				//freeArgs(command);
 				break;
