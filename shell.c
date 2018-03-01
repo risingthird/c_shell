@@ -215,6 +215,13 @@ int main(int argc, char **argv)
 		}
 		numCommands = parseCommands(line, command); // parse a command line into different
 													// processes (by ";")
+		if (numCommands < 0)
+		{
+			freeArgs(command);
+			printf("Syntax error\n");
+			free(line);
+			continue;
+		}
 
 		for (int i = 0; i < numCommands; i++)
 		{
