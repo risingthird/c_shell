@@ -245,7 +245,7 @@ int main(int argc, char** argv) {
 			}
 			status = JOBRUN;
 			Job* job = createJob(jobLine, toAdd, status, field);
-
+			free(jobLine);
 
 			// I don't know what to do with status right now, will figure out in a moment 
 			//free(dummy);// shouldn't free it here, process will be automatically freed when the job is removed from joblist
