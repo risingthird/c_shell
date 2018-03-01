@@ -201,7 +201,7 @@ void printJobStatus(Job* job) {
 
 void freeArgs(char** args) {
 	int count = 0;
-	while(args[count] != NULL) {
+	while(args != NULL && args[count] != NULL) {
 		free(args[count]);
 		count++;
 	}
