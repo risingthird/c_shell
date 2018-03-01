@@ -229,7 +229,8 @@ int main(int argc, char** argv) {
 				temp = toAdd;
 			}*/
 
-			if (strcmp(args_without_pipe[0], "exit") == 0) {
+			if (args_without_pipe != NULL && args_without_pipe[0] != NULL) { 
+				if (strcmp(args_without_pipe[0], "exit") == 0) {
 				freeProcess(toAdd);
 				free(jobLine);
 				freeArgs(args_without_pipe);
@@ -237,7 +238,8 @@ int main(int argc, char** argv) {
 				free(line);
 				freeArgs(command);
 				return 0;
-		    }
+		    		}
+			}
 
 			int field;
 			int status;
