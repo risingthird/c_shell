@@ -196,14 +196,14 @@ void put_job_in_foreground(Job* job, sigset_t child_mask, int flag_stop) {
 
 	//printjob(job->id);
 	//if the job complete, we exit the job
-	if(job->status == JOBCOMP) {
+	if(job->status == JOBSTOP){
+		//if job has been suspended, we store its termios
+		tcgetattr(myShTerminal, &job->j_Tmodes);
+	}
+	else {
 		jobs_lock(child_mask); //need to implement, block all the possible access to job list
 		jobRemoveJobId(job->jobId);
 		jobs_unlock(child_mask);
-	}
-	else{
-		//if job has been suspended, we store its termios
-		tcgetattr(myShTerminal, &job->j_Tmodes);
 	}
 
     /* Put the shell back in the foreground.  */
