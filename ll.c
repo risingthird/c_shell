@@ -113,7 +113,9 @@ int jobRemovePid(pid_t pid) {
 			}
 			id--;
 			freeJob(temp->job);
+			temp->job = NULL;
 			free(temp);
+			temp = NULL;
 			return TRUE;
 		}
 		else {
