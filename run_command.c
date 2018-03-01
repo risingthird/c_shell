@@ -184,14 +184,14 @@ void put_job_in_foreground(Job* job, sigset_t child_mask, int flag_stop) {
 	while(job->status != JOBCOMP && job->status != JOBSTOP && job->status != JOBTERM) {
 		//pid = waitpid(WAIT_ANY, &status, WUNTRACED | WNOHANG);
 		pid = waitpid(job->pgid, &status, WUNTRACED);			// since it's in foreground, we shouldn't use WNOHANG
-		printf("foreground job returned, pid is %d\n", pid);
+		//printf("foreground job returned, pid is %d\n", pid);
 
 // 		if(WIFSTOPPED(status))
 // 			jobChangeStatus(job, JOBSTOP);
 // 		else
 // 			jobChangeStatus(job, JOBCOMP);
 
-		printf("Job status is %d\n", job->status);
+		//printf("Job status is %d\n", job->status);
 	}
 
 	//printjob(job->id);
