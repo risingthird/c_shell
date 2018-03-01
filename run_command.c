@@ -59,11 +59,11 @@ void bKill(char** args, int argn) {
 	  			perror("Kill failed\n");
 			}
       	}	
-      else {
-		if(kill(to_be_killed,SIGTERM) == -1) {
-	  		perror("Kill failed\n");
-		}
-      }
+      	else {
+			if(kill(to_be_killed,SIGTERM) == -1) {
+	  			perror("Kill failed\n");
+			}
+      	}
     }
     //if the element is %number
     else if(args[i][0] == '%' && atoi(args[i]+1) != 0) {
@@ -93,6 +93,9 @@ void bKill(char** args, int argn) {
     if(dash_flag > 0 && i > 1) {
       //wait until the sigkill sent                                                                                                                             
       waitpid(job->pgid, &status, 0);
+    }
+    else if (i > 0) {
+    	waitpid(job->pgid, &status, 0);
     }
   }
 }
