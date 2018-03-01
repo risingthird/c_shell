@@ -10,7 +10,6 @@
 void bKill(char** args, int argn);
 void bFg(char** args, int argn, sigset_t child_mask);
 void bBg(char** args, int argn);
-void bExit();
 void bJobs();
 void executing_command_without_pipe(Job* job, sigset_t child_mask);
 void jobs_lock(sigset_t child_mask);

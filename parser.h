@@ -3,8 +3,6 @@
 
 #include "util.h"
 
-
-
 char* readLine();
 int parseCommands(char* line, char** command);
 int parseSegments(char* command, char** segments);

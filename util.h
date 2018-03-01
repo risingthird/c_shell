@@ -25,16 +25,4 @@ pid_t myShPGid;
 struct termios myShTmodes;
 pid_t check_stat_pid;
 
-/*
-#define TRUE 1
-#define FALSE 0
-#define JOBCOMP 0
-#define JOBSTOP 1 
-#define JOBRUN 2
-#define JOBBACK 3
-#define JOBFORE 4
-#define PROCCOMP 0
-#define PROCSTOP 1
-#define PROCRUN 2
-*/
 #endif

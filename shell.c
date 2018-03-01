@@ -5,7 +5,6 @@ structure inspired by: https://github.com/jmreyes/simple-c-shell/blob/master/sim
 #include <stdio.h>
 #include <sys/types.h>
 #include <signal.h>
-//#include <sys/wait.h>
 #include <fcntl.h>
 #include <termios.h>
 #include <pwd.h>
@@ -32,10 +31,7 @@ sigset_t child_mask;
 
 void sigchld_handler(int sig, siginfo_t *sif, void *notused)
 {
-	//int status;
 	// first get the process id of the child process and get the pgid of the child process
-	//printf("%d\n", sif->si_pid);
-	//pid_t pgid = getpgid(sif->si_pid);
 	pid_t pgid = sif->si_pid;
 	if (pgid == NEGATIVE)
 	{
@@ -46,11 +42,8 @@ void sigchld_handler(int sig, siginfo_t *sif, void *notused)
 	Job *job = getJobPid(pgid);
 	if (job == NULL)
 	{
-		//printf("getJobPid has error.");
 		return;
 	}
-	//check whether the calling process is the one that has changed status, wait without blocking
-	//if (sif->si_pid == waitpid(pgid, &status, WUNTRACED)) {
 	//check what is the exit status of the calling process
 	/* if the job normally exit, update its status, print the job status, remove it from job list
 			 and then free the memory. Else if the job is suspended, update its status and print its status.
@@ -61,9 +54,6 @@ void sigchld_handler(int sig, siginfo_t *sif, void *notused)
 	{
 		jobChangeStatus(job, JOBCOMP);
 		printJobStatus(job);
-		//if(jobRemovePid(pgid) != TRUE)
-		//			printf("Job removal from the job list error.\n");
-		//		freeJob(job); // free this job
 		return;
 	}
 	if (sif->si_code == CLD_STOPPED)
@@ -73,17 +63,12 @@ void sigchld_handler(int sig, siginfo_t *sif, void *notused)
 		printJobStatus(job);
 		return;
 	}
-	//if ( (WTERMSIG(sif->si_status) <= 12) || (WTERMSIG(sif->si_status) == 15))
 	if (sif->si_code == CLD_KILLED)
 	{
 		jobChangeStatus(job, JOBTERM);
 		printJobStatus(job);
-		//if(jobRemovePid(pgid) != TRUE)
-		//			printf("Job removal from the job list error.\n");
-		//		freeJob(job); // free this job
 		return;
 	}
-	//}
 	return;
 }
 
@@ -97,20 +82,13 @@ void ourPrompt()
 	getcwd(path, MAXLINE);			   // get the current working directory
 	char *username = pwd->pw_name;	 // username
 	char *homedirectory = pwd->pw_dir; // home directory
-	// a little bit verbose, restore when all bug fixed
-	 if (gethostname(host, MAXLEN) == 0) {
-	   printf("[用心写bug，用脚写shell, only bugs live forever ┻━┻ ︵ヽ(`Д´)ﾉ︵﻿ ┻━┻, ¯\\_(ツ)_/¯ whatevs Broken Shell]\n[%s@%s ", username, host);
-	 } else
-	   printf("[用心写bug，用脚写shell, only bugs live forever ┻━┻ ︵ヽ(`Д´)ﾉ︵﻿ ┻━┻, ¯\\_(ツ)_/¯ whatevs Broken Shell]\n[%s@unknown ", username);
-
-	/*if (gethostname(host, MAXLEN) == 0)
+									   // a little bit verbose, restore when all bug fixed
+	if (gethostname(host, MAXLEN) == 0)
 	{
-		printf(">>>>>>>>>>>>[%s@%s ", username, host);
+		printf("[用心写bug，用脚写shell, (ヘ･_･)ヘ┳━┳ ┫ ┻━┻ ︵ヽ(`Д´)ﾉ︵ ┻━┻ ┣ﾍ(^▽^ﾍ)Ξ(ﾟ▽ﾟ*)ﾉ┳━┳, ¯\\_(ツ)_/¯ TZJ Shell]\n[%s@%s ", username, host);
 	}
 	else
-	{
-		printf(">>>>>>>>>>>>[%s@unknown ", username);
-	}*/
+		printf("[用心写bug，用脚写shell, (ヘ･_･)ヘ┳━┳ ┫ ┻━┻ ︵ヽ(`Д´)ﾉ︵ ┻━┻ ┣ﾍ(^▽^ﾍ)Ξ(ﾟ▽ﾟ*)ﾉ┳━┳, ¯\\_(ツ)_/¯ TZJ Shell]\n[%s@unknown ", username);
 
 	if (strlen(path) < strlen(homedirectory) || strncmp(path, homedirectory, strlen(homedirectory)))
 		printf("%s]", path);
@@ -138,24 +116,13 @@ void initShell()
 		{
 			perror("tcgetpgrp() failed");
 		}
-		//else{
-		//printf("The current foreground process group id of STDOUT: %d\n", (int)myShPGid);
-		//}
-		/*else {
-           if (myShTmodes.c_lflag.c_iflag & IXON)
-               printf("Terminal start and stop is enabled\n");
-           if (myShTmodes.c_lflag.c_lflag & ICANON)
-               printf("Terminal is in canonical mode\n");
-        }*/
 	}
 }
 
 int main(int argc, char **argv)
 {
-	//initShell();
 	jobInit();
 	initShell();
-	//int status = 0;
 	int built_in_flag = FALSE;
 	check_stat_pid = -10;
 	/* Sigchild signal handling*/
@@ -170,9 +137,6 @@ int main(int argc, char **argv)
 	//register the signal SIGCHLD.
 	sigaction(SIGCHLD, &sa, NULL);
 
-	//sigset_t block_mask;
-	//sigaddset(&block_mask, SIGINT);
-
 	//ignore most signals in parent shell
 	signal(SIGINT, SIG_IGN);
 	signal(SIGTERM, SIG_IGN);
@@ -180,12 +144,7 @@ int main(int argc, char **argv)
 	signal(SIGTTOU, SIG_IGN);
 	signal(SIGTTIN, SIG_IGN);
 	signal(SIGTSTP, SIG_IGN);
-	// sigaddset(&block_mask, SIGTSTP);
-	// sigaddset(&block_mask, SIGTERM);
-	// sigaddset(&block_mask, SIGQUIT);
-	// sigaddset(&block_mask, SIGTTOU);
-	// sigaddset(&block_mask, SIGTTIN);
-	// sigprocmask(SIG_BLOCK, &block_mask, NULL);
+
 	sigemptyset(&child_mask);
 	sigaddset(&child_mask, SIGINT);
 	sigaddset(&child_mask, SIGTSTP);
@@ -195,7 +154,6 @@ int main(int argc, char **argv)
 	sigaddset(&child_mask, SIGTTIN);
 	sigaddset(&child_mask, SIGCHLD);
 
-	//signal(SIGINT, SIG_IGN);
 	int numCommands;
 	int numArguments;
 	//int numSegments;
@@ -207,10 +165,9 @@ int main(int argc, char **argv)
 		bzero(command, MAXLINE);
 		if ((line = readline(" ")) == NULL)
 		{
-			//perror("IO error\n");
 			free(command);
 			freeJobList();
-			perror("Exit the shell.\n Log out successfully.");
+			perror("Exit the shell.\nLog out successfully.");
 			exit(EXIT_SUCCESS);
 		}
 		numCommands = parseCommands(line, command); // parse a command line into different
@@ -236,18 +193,6 @@ int main(int argc, char **argv)
 			toAdd->args = args_without_pipe;
 			toAdd->argn = numArguments;
 			toAdd->next = NULL;
-			/*Process* temp = dummy;
-			for(int j = 0; j < numSegments; j++) {
-				args = (char**) malloc(sizeof(char*) * MAXLEN);
-				Process* toAdd = (Process*) malloc(sizeof(Process));
-				numArguments = parseArguments(argsWithPipe[j], args);
-				toAdd->args = args;
-				toAdd->argn = numArguments;
-				toAdd->next = NULL;
-
-				temp->next = toAdd;
-				temp = toAdd;
-			}*/
 
 			if (args_without_pipe != NULL && args_without_pipe[0] != NULL)
 			{
@@ -255,34 +200,29 @@ int main(int argc, char **argv)
 				{
 					freeProcess(toAdd);
 					free(jobLine);
-					//freeArgs(args_without_pipe);
 					freeJobList();
 					free(line);
 					freeArgs(command);
 					return 0;
 				}
 			}
-                        if (args_without_pipe != NULL && args_without_pipe[0] != NULL)
-                        {
-                                int ret;
-                                if (strcmp(args_without_pipe[0], "cd") == 0 && args_without_pipe[1] == NULL)
-                                {
-                                        const char* home = getenv("HOME");
-                                        ret = chdir(home);
-                                        if (ret == -1)
-                                                perror("cd");
-                                        //free(jobLine);
-                                        //freeProcess(toAdd);
-                                }
-                                else if (strcmp(args_without_pipe[0], "cd") == 0 && args_without_pipe[1] != NULL)
-                                {
-                                        ret = chdir(args_without_pipe[1]);
-                                        if (ret == -1)
-                                                perror("cd");
-                                       //free(jobLine);
-                                       //freeProcess(toAdd);
-                                }       
-                        }
+			if (args_without_pipe != NULL && args_without_pipe[0] != NULL)
+			{
+				int ret;
+				if (strcmp(args_without_pipe[0], "cd") == 0 && args_without_pipe[1] == NULL)
+				{
+					const char *home = getenv("HOME");
+					ret = chdir(home);
+					if (ret == -1)
+						perror("cd");
+				}
+				else if (strcmp(args_without_pipe[0], "cd") == 0 && args_without_pipe[1] != NULL)
+				{
+					ret = chdir(args_without_pipe[1]);
+					if (ret == -1)
+						perror("cd");
+				}
+			}
 			int field;
 			int status;
 			if (numArguments < 0)
@@ -297,16 +237,13 @@ int main(int argc, char **argv)
 			else
 			{
 				free(jobLine);
-				//freeArgs(args_without_pipe);
 				freeProcess(toAdd);
-				//freeArgs(command);
 				break;
 			}
 			status = JOBRUN;
 			Job *job = createJob(jobLine, toAdd, status, field);
 			free(jobLine);
 
-			// I don't know what to do with status right now, will figure out in a moment
 			//free(dummy);// shouldn't free it here, process will be automatically freed when the job is removed from joblist
 			if (!check_built_in(job) && jobInsert(job) == FALSE)
 			{

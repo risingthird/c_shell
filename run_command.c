@@ -139,9 +139,6 @@ void bKill(char **args, int argn)
 			//wait until the sigkill sent
 			waitpid(job->pgid, &status, 0);
 		}
-		// else if (i > 0) {
-		// 	waitpid(job->pgid, &status, 0);
-		// }
 	}
 }
 // void bKill(char** args, int argn) {
@@ -219,7 +216,6 @@ void bKill(char **args, int argn)
 
 void put_job_in_foreground(Job *job, sigset_t child_mask, int flag_stop)
 {
-  //pid_t pid;
 	int status;
 	//put the job into foreground;
 	//shell_terminal is a global file descriptor represented as shell
@@ -236,19 +232,9 @@ void put_job_in_foreground(Job *job, sigset_t child_mask, int flag_stop)
 	//wait foreground job to exit
 	while (job->status != JOBCOMP && job->status != JOBSTOP && job->status != JOBTERM)
 	{
-		//pid = waitpid(WAIT_ANY, &status, WUNTRACED | WNOHANG);
 		waitpid(job->pgid, &status, WUNTRACED); // since it's in foreground, we shouldn't use WNOHANG
-													  //printf("foreground job returned, pid is %d\n", pid);
-
-		// 		if(WIFSTOPPED(status))
-		// 			jobChangeStatus(job, JOBSTOP);
-		// 		else
-		// 			jobChangeStatus(job, JOBCOMP);
-
-		//printf("Job status is %d\n", job->status);
 	}
 
-	//printjob(job->id);
 	//if the job complete, we exit the job
 	if (job->status == JOBSTOP)
 	{
@@ -271,18 +257,8 @@ void put_job_in_foreground(Job *job, sigset_t child_mask, int flag_stop)
 
 void bFg(char **args, int argn, sigset_t child_mask)
 {
-	//int jid; // get job id by args or use default setting
 	Job *current_job = NULL;
 	int is_suspended = 0;
-	/*if(argn == 1)
-		jid = num_of_job(); // implemented by jiaping, get the number of job in a job list
-	else
-		jid = atoi(args[1]); //convert the input job id to int
-	current_job = getJobJobId(jid);
-	if(current_job == NULL) {
-		printf("job %d does not exist, we can find it\n", jid);
-		return;
-	}*/
 
 	if (argn == 1)
 	{
@@ -450,11 +426,6 @@ void bFg(char **args, int argn, sigset_t child_mask)
 void bBg(char **args, int argn)
 {
 	Job *current_job = NULL;
-	/*if(argn == 1)
-		jid = num_of_job(); // implemented by jiaping, get the number of job in a job list
-	else
-		jid = atoi(args[1]); //convert the input job id to int
-	*/
 	if (argn == 1)
 	{
 		current_job = getJLastSuspended();
@@ -490,7 +461,6 @@ void bBg(char **args, int argn)
 		printf("Pleas type in %%[number]\n");
 	}
 
-	//current_job = getJobJobId(jid);
 	if (current_job == NULL)
 	{
 		printf("job does not exist, we can find it\n");
@@ -513,7 +483,6 @@ int check_built_in(Job *job)
 		return FALSE;
 	}
 	char **args = job->processList->args;
-	//int argn = job->processList->argn;
 	if (args == NULL)
 	{
 		return FALSE;
@@ -538,9 +507,6 @@ int check_built_in(Job *job)
 	{
 		return TRUE;
 	}
-	/*else if (strcmp(args[0],"exit") == 0) {
-		return TRUE;
-	}*/
 	else if (strcmp(args[0], "jobs") == 0)
 	{
 		return TRUE;
@@ -567,10 +533,6 @@ int exeBuiltIn(char **args, int argn, sigset_t child_mask)
 	{
 		bBg(args, argn);
 	}
-	else if (strcmp(args[0], "exit") == 0)
-	{
-		bExit(); // todo
-	}
 	else if (strcmp(args[0], "jobs") == 0)
 	{
 		bJobs(); // todo
@@ -594,7 +556,6 @@ void executing_command_without_pipe(Job *job, sigset_t child_mask)
 	char **args = job->processList->args;
 	int argn = job->processList->argn;
 	// check if the this job is built-in command, foreground, or background
-	// TODO: check_built_in(), exeBuiltIn(), if this job is built-in command
 	if (check_built_in(job))
 	{
 		job->status = JOBCOMP;
@@ -613,11 +574,9 @@ void executing_command_without_pipe(Job *job, sigset_t child_mask)
 			signal(SIGINT, SIG_DFL);
 			signal(SIGTERM, SIG_DFL);
 			signal(SIGQUIT, SIG_DFL);
-			//signal(SIGTTOU, SIG_DFL);
 			signal(SIGTTIN, SIG_DFL);
 			signal(SIGTSTP, SIG_DFL);
 			// execute the command
-			//printf("%d %d %d \n",getpgid(getpid()), getpid(), getppid());
 			tcsetpgrp(myShTerminal, getpid());
 			signal(SIGTTOU, SIG_DFL);
 			if ((execvp(args[0], args)) == FAIL)
@@ -631,11 +590,9 @@ void executing_command_without_pipe(Job *job, sigset_t child_mask)
 			// parent process
 			setpgid(pid, 0); // set the pgid of the child process
 			check_stat_pid = pid;
-			//printf("check_stat_pid %d", check_stat_pid);
 			tcsetpgrp(myShTerminal, pid); //bring child to foreground, modified Tue 7:25 pm
 			job->pgid = pid;
 			waitpid(pid, &status, WUNTRACED);
-			//printf("Test!\n");
 			// if the signal is termination (WIFSIGNALED) or normal exit, remove the job and free the memory.
 			if (WIFSIGNALED(status) || WIFEXITED(status))
 			{
@@ -681,7 +638,6 @@ void executing_command_without_pipe(Job *job, sigset_t child_mask)
 			//child process
 			setpgrp(); // set the pgid of the child process
 			job->pgid = getpgrp();
-			//sigemptyset(&block_mask);
 			signal(SIGTSTP, SIG_DFL);
 			signal(SIGINT, SIG_DFL);
 			signal(SIGTERM, SIG_DFL);
@@ -702,7 +658,6 @@ void executing_command_without_pipe(Job *job, sigset_t child_mask)
 			setpgid(pid, 0); // set the pgid of the child process
 			check_stat_pid = pid;
 			job->pgid = pid;
-			//printf("check_stat_pid %d", check_stat_pid);
 			sigprocmask(SIG_UNBLOCK, &child, NULL);
 			// waitpid(pid, &status, WNOHANG);
 			// // if the signal is termination (WIFSIGNALED) or normal exit, remove the job and free the memory.
@@ -721,12 +676,6 @@ void executing_command_without_pipe(Job *job, sigset_t child_mask)
 			exit(EXIT_FAILURE);
 		}
 	}
-}
-
-void bExit()
-{
-	freeJobList();
-	exit(EXIT_SUCCESS);
 }
 
 void jobs_lock(sigset_t child_mask)

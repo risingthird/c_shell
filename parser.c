@@ -28,7 +28,6 @@ void trimAll(char *s) {
 	trimLeft(s);
 } */
 #include "parser.h"
-//#include "ll.h"
 
 int check_last_character_in_process(char *process_line)
 {
@@ -55,8 +54,6 @@ int check_last_character_in_process(char *process_line)
 int parseCommands(char *line, char **command)
 {
 	int count = 0;
-	//int i = 0;
-	//int num_process = DEFAULT_NUM_PROCESS;
 	char *split;
 
 	if ((split = strtok(line, ";")) == NULL)
@@ -70,7 +67,6 @@ int parseCommands(char *line, char **command)
 	int len;
 	while (split != NULL)
 	{
-		//int len;
 		len = strlen(split);
 		command[count] = malloc(len + 1);
 		bzero(command[count], len + 1);

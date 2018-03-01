@@ -28,7 +28,6 @@ Job *createJob(char *line, Process *process, int status, int field)
 	}
 	toReturn->processList = process;
 	toReturn->pgid = 0;
-	// I have no idea how to set pgid. Need to figure out later
 	return toReturn;
 }
 
