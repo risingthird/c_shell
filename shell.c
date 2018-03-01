@@ -231,14 +231,14 @@ int main(int argc, char** argv) {
 
 			if (args_without_pipe != NULL && args_without_pipe[0] != NULL) { 
 				if (strcmp(args_without_pipe[0], "exit") == 0) {
-				freeProcess(toAdd);
-				free(jobLine);
-				freeArgs(args_without_pipe);
-				freeJobList();
-				free(line);
-				freeArgs(command);
-				return 0;
-		    		}
+					freeProcess(toAdd);
+					free(jobLine);
+					freeArgs(args_without_pipe);
+					freeJobList();
+					free(line);
+					freeArgs(command);
+					return 0;
+		    	}
 			}
 
 			int field;
@@ -253,6 +253,7 @@ int main(int argc, char** argv) {
 			else {
 				free(jobLine);
 				freeArgs(args_without_pipe);
+				freeProcess(toAdd);
 				//freeArgs(command);
 				break;
 			}
