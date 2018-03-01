@@ -524,6 +524,7 @@ void executing_command_without_pipe(Job *job, sigset_t child_mask) {
 		} else if (pid > 0) {
 			// parent process
 			setpgid(pid, 0); // set the pgid of the child process
+			check_stat_pid = pid;
 			tcsetpgrp(myShTerminal, pid); //bring child to foreground, modified Tue 7:25 pm
 			job->pgid = pid;
 			waitpid(pid, &status, WUNTRACED);
@@ -580,6 +581,7 @@ void executing_command_without_pipe(Job *job, sigset_t child_mask) {
 		} else if (pid > 0) {
 			// parent process
 			setpgid(pid, 0); // set the pgid of the child process
+			check_stat_pid = pid;
 			job->pgid = pid;
 			sigprocmask(SIG_UNBLOCK, &child, NULL);
 			// waitpid(pid, &status, WNOHANG);
