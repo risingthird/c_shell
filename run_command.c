@@ -181,7 +181,7 @@ void put_job_in_foreground(Job* job, sigset_t child_mask, int flag_stop) {
 
 	//we have already changed the status of process
 	//wait foreground job to exit
-	while(job->status != JOBCOMP && job->status != JOBSTOP) {
+	while(job->status != JOBCOMP && job->status != JOBSTOP && job->status != JOBTERM) {
 		//pid = waitpid(WAIT_ANY, &status, WUNTRACED | WNOHANG);
 		pid = waitpid(job->pgid, &status, WUNTRACED);			// since it's in foreground, we shouldn't use WNOHANG
 		printf("foreground job returned, pid is %d\n", pid);
